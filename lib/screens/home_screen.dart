@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constants.dart';
 import 'menu_screen.dart';
+import 'generate_bill_screen.dart';
+import 'sales.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function(int) onNavigate;
@@ -14,7 +16,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppConstants.primaryColor,
       appBar: AppBar(
-        backgroundColor: AppConstants.secondaryColor,
+        backgroundColor: Colors.black,
         toolbarHeight: 120,
         title: Align(
           alignment: Alignment.centerLeft,
@@ -127,7 +129,14 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(28),
                         ),
                       ),
-                      onPressed: () => onNavigate(2),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BillGenerationScreen(),
+                          ),
+                        );
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -168,12 +177,19 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(28),
                         ),
                       ),
-                      onPressed: () => onNavigate(2),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SalesScreen(),
+                          ),
+                        );
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Settings",
+                            "Sales",
                             style: GoogleFonts.montserrat(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -204,39 +220,16 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    /// SVG (takes more space)
-                    Expanded(
-                      // flex: 3,
-                      child: Container(
-                        height: 400,
-                        child: SvgPicture.asset(
-                          "assets/images/t-rex.svg",
-                          fit: BoxFit.contain,
-                          color: AppConstants.secondaryColor,
-                        ),
-                      ),
+                child: Expanded(
+                  // flex: 3,
+                  child: Container(
+                    height: 400,
+                    child: SvgPicture.asset(
+                      "assets/images/t-rex.svg",
+                      fit: BoxFit.contain,
+                      color: AppConstants.secondaryColor,
                     ),
-
-                    // const SizedBox(width: 24),
-
-                    /// PNG (smaller)
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: Container(
-                    //     height: 400,
-                    //     child: Transform.rotate(
-                    //       angle: 0 * 3.1415926535 / 180,
-                    //       child: Image.asset(
-                    //         "assets/images/Dinazor White.png",
-                    //         fit: BoxFit.contain,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
+                  ),
                 ),
               ),
             ),
