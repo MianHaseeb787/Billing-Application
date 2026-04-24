@@ -33,7 +33,6 @@ class HomeScreenWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Simply return HomeScreen
-    return HomeScreen(onNavigate: (_) {}); // onNavigate does nothing for now
+    return HomeScreen(onNavigate: (_) {});
   }
 }
