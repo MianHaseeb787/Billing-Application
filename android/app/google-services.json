@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "830364758126",
+    "firebase_url": "https://dino-dine-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "dino-dine",
     "storage_bucket": "dino-dine.firebasestorage.app"
   },

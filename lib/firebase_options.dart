@@ -46,6 +46,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '830364758126',
     projectId: 'dino-dine',
     authDomain: 'dino-dine.firebaseapp.com',
+    databaseURL:
+        'https://dino-dine-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'dino-dine.firebasestorage.app',
     measurementId: 'G-YG7VBH814R',
   );
@@ -55,6 +57,8 @@ class DefaultFirebaseOptions {
     appId: '1:830364758126:android:9c4cbfff7bc3e671ddb67f',
     messagingSenderId: '830364758126',
     projectId: 'dino-dine',
+    databaseURL:
+        'https://dino-dine-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'dino-dine.firebasestorage.app',
   );
 
@@ -63,6 +67,8 @@ class DefaultFirebaseOptions {
     appId: '1:830364758126:ios:46e4cd27f43e646addb67f',
     messagingSenderId: '830364758126',
     projectId: 'dino-dine',
+    databaseURL:
+        'https://dino-dine-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'dino-dine.firebasestorage.app',
     iosBundleId: 'com.example.billingapplication',
   );
@@ -72,6 +78,8 @@ class DefaultFirebaseOptions {
     appId: '1:830364758126:ios:46e4cd27f43e646addb67f',
     messagingSenderId: '830364758126',
     projectId: 'dino-dine',
+    databaseURL:
+        'https://dino-dine-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'dino-dine.firebasestorage.app',
     iosBundleId: 'com.example.billingapplication',
   );
@@ -82,6 +90,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '830364758126',
     projectId: 'dino-dine',
     authDomain: 'dino-dine.firebaseapp.com',
+    databaseURL:
+        'https://dino-dine-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'dino-dine.firebasestorage.app',
     measurementId: 'G-CXGHJBKGN6',
   );

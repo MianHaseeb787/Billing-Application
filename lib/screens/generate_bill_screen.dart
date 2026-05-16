@@ -1,340 +1,795 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' hide Order;
+import 'package:provider/provider.dart';
+import '../models/order.dart';
+import '../providers/order_provider.dart';
+import '../utils/constants.dart';
+import '../utils/receipt_printer.dart';
 
-class BillGenerationScreen extends StatefulWidget {
-  const BillGenerationScreen({super.key});
+class GenerateBillScreen extends StatefulWidget {
+  const GenerateBillScreen({super.key});
 
   @override
-  State<BillGenerationScreen> createState() => _BillGenerationScreenState();
+  State<GenerateBillScreen> createState() =>
+      _GenerateBillScreenState();
 }
 
-class _BillGenerationScreenState extends State<BillGenerationScreen> {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+class _GenerateBillScreenState extends State<GenerateBillScreen> {
+  Order? _selected;
+  PaymentMethod _payment = PaymentMethod.cash;
+  double _discount = 0;
+  final _discountCtrl = TextEditingController();
+  final _cashCtrl = TextEditingController();
+  bool _processing = false;
 
-  final List<String> categories = ["Burgers", "Pizza", "Drinks", "Desserts"];
-
-  String selectedCategory = "Burgers";
-
-  /// Cart
-  List<Map<String, dynamic>> cart = [];
-
-  /// ADD TO BILL
-  void addToCart(Map<String, dynamic> item) {
-    final index = cart.indexWhere((e) => e["name"] == item["name"]);
-
-    if (index != -1) {
-      setState(() {
-        cart[index]["qty"] += 1;
-      });
-    } else {
-      setState(() {
-        cart.add({"name": item["name"], "price": item["price"], "qty": 1});
-      });
-    }
-  }
-
-  /// TOTAL
-  double get total =>
-      cart.fold(0, (sum, item) => sum + (item["price"] * item["qty"]));
-
-  /// GENERATE BILL + LOG
-  Future<void> generateBill() async {
-    if (cart.isEmpty) return;
-
-    await firestore.collection("salesLogs").add({
-      "items": cart,
-      "total": total,
-      "createdAt": FieldValue.serverTimestamp(),
-    });
-
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text(
-          "Bill Generated",
-          style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          "Total Amount: TL ${total.toStringAsFixed(2)}",
-          style: GoogleFonts.montserrat(fontSize: 18),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              setState(() {
-                cart.clear();
-              });
-            },
-            child: const Text("OK"),
-          ),
-        ],
-      ),
-    );
+  @override
+  void dispose() {
+    _discountCtrl.dispose();
+    _cashCtrl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.primaryColor,
+      backgroundColor: AppConstants.bg,
+      appBar: AppBar(title: const Text('Hesap Kes')),
+      body: Row(
+        children: [
+          SizedBox(
+              width: 300,
+              child: _OrderList(
+                selected: _selected,
+                onSelect: (order) => setState(() {
+                  _selected = order;
+                  _discount = order.discount;
+                  _discountCtrl.text = order.discount > 0
+                      ? order.discount.toStringAsFixed(2)
+                      : '';
+                  _cashCtrl.clear();
+                }),
+              )),
+          Expanded(child: _buildBillPanel()),
+        ],
+      ),
+    );
+  }
 
-      /// APPBAR
-      appBar: AppBar(
-        backgroundColor: AppConstants.secondaryColor,
-        toolbarHeight: 120,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
+  Widget _buildBillPanel() {
+    if (_selected == null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(width: 16),
+            const Icon(Icons.touch_app_outlined,
+                size: 52, color: AppConstants.text3),
+            const SizedBox(height: 14),
+            Text('Hesap kesmek için sipariş seçin',
+                style: GoogleFonts.montserrat(
+                    fontSize: 15, color: AppConstants.text2)),
+            const SizedBox(height: 4),
             Text(
-              "DinO Dine",
-              style: GoogleFonts.montserrat(
-                fontSize: 42,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 20),
-            SvgPicture.asset(
-              "assets/images/dino_logo.svg",
-              height: 55,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 30),
-            Text(
-              "Generate Bill",
-              style: GoogleFonts.montserrat(
-                fontSize: 24,
-                color: Colors.white70,
-              ),
-            ),
+                'Mutfak hazır olarak işaretlediğinde siparişler görünür',
+                style: GoogleFonts.montserrat(
+                    fontSize: 12, color: AppConstants.text3)),
           ],
         ),
-      ),
+      );
+    }
 
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          children: [
-            /// LEFT PANEL
-            Expanded(
-              flex: 3,
-              child: Column(
-                children: [
-                  /// CATEGORY BUTTONS
-                  SizedBox(
-                    height: 60,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        final cat = categories[index];
-                        final selected = cat == selectedCategory;
+    final order = _selected!;
+    final effectiveDiscount =
+        _discount.clamp(0, order.subtotal).toDouble();
+    final effectiveTotal = order.subtotal +
+        order.tax +
+        order.serviceCharge -
+        effectiveDiscount;
+    final cashPaid = double.tryParse(_cashCtrl.text) ?? 0;
+    final changeDue =
+        _payment == PaymentMethod.cash && cashPaid > 0
+            ? cashPaid - effectiveTotal
+            : null;
 
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: selected
-                                  ? AppConstants.secondaryColor
-                                  : Colors.white,
-                              foregroundColor: selected
-                                  ? Colors.white
-                                  : AppConstants.secondaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                selectedCategory = cat;
-                              });
-                            },
-                            child: Text(
-                              cat,
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  /// MENU ITEMS
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: firestore
-                            .collection("menuItems")
-                            .where("category", isEqualTo: selectedCategory)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          final docs = snapshot.data!.docs;
-
-                          return GridView.builder(
-                            itemCount: docs.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 14,
-                                  mainAxisSpacing: 14,
-                                  childAspectRatio: 1.4,
-                                ),
-                            itemBuilder: (context, index) {
-                              final item = docs[index];
-                              final data = item.data() as Map<String, dynamic>;
-
-                              return GestureDetector(
-                                onTap: () => addToCart(data),
-                                child: Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        data["name"],
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        "TL ${data["price"]}",
-                                        style: GoogleFonts.montserrat(
-                                          color: AppConstants.secondaryColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(width: 24),
-
-            /// RIGHT BILL PANEL
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Container(
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+              boxShadow: [
+                BoxShadow(
+                  color: AppConstants.purple.withValues(alpha: 0.12),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
                 ),
-                child: Column(
-                  children: [
-                    Text(
-                      "Current Bill",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppConstants.secondaryColor,
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: cart.length,
-                        itemBuilder: (context, index) {
-                          final item = cart[index];
-
-                          return ListTile(
-                            title: Text(item["name"]),
-                            subtitle: Text("x${item["qty"]}"),
-                            trailing: Text(
-                              "TL ${(item["price"] * item["qty"]).toStringAsFixed(2)}",
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    const Divider(),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Total",
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      Text('DinO Dine',
                           style: GoogleFonts.montserrat(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "TL ${total.toStringAsFixed(2)}",
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                              color: AppConstants.text1,
+                              letterSpacing: -0.5)),
+                      const SizedBox(height: 2),
+                      Text('Restoran POS',
                           style: GoogleFonts.montserrat(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: AppConstants.secondaryColor,
-                          ),
+                              fontSize: 11,
+                              color: AppConstants.text3,
+                              letterSpacing: 2)),
+                      const SizedBox(height: 14),
+                      const Divider(color: AppConstants.border),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Masa ${order.tableNo}',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppConstants.text1)),
+                          Text(
+                              'Sipariş #${order.id.substring(0, 6).toUpperCase()}',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppConstants.text1)),
+                        ],
+                      ),
+                      if (order.createdAt != null) ...[
+                        const SizedBox(height: 4),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(_fmtDt(order.createdAt!),
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 11,
+                                  color: AppConstants.text3)),
                         ),
                       ],
-                    ),
-
-                    const SizedBox(height: 20),
-
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Divider(color: AppConstants.border),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                        child: Text('Ürün',
+                            style: GoogleFonts.montserrat(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppConstants.text3))),
                     SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConstants.secondaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
+                        width: 40,
+                        child: Text('Adet',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.montserrat(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppConstants.text3))),
+                    SizedBox(
+                        width: 90,
+                        child: Text('Tutar',
+                            textAlign: TextAlign.right,
+                            style: GoogleFonts.montserrat(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppConstants.text3))),
+                  ],
+                ),
+                const Divider(
+                    height: 12, color: AppConstants.border),
+                ...order.items.map((item) => Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Text(item.name,
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 13,
+                                      color: AppConstants.text1))),
+                          SizedBox(
+                              width: 40,
+                              child: Text('×${item.quantity}',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 13,
+                                      color: AppConstants.text2))),
+                          SizedBox(
+                              width: 90,
+                              child: Text(
+                                  'TL ${item.total.toStringAsFixed(2)}',
+                                  textAlign: TextAlign.right,
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 13,
+                                      color: AppConstants.text1))),
+                        ],
+                      ),
+                    )),
+                const SizedBox(height: 8),
+                const Divider(color: AppConstants.border),
+                const SizedBox(height: 6),
+                _billRow('Ara Toplam', order.subtotal),
+                _billRow('KDV (%15)', order.tax),
+                _billRow('Servis Ücreti (%5)',
+                    order.serviceCharge),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Text('İndirim (TL)',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 12,
+                                  color: AppConstants.text2))),
+                      SizedBox(
+                        width: 100,
+                        child: TextField(
+                          controller: _discountCtrl,
+                          keyboardType:
+                              const TextInputType.numberWithOptions(
+                                  decimal: true),
+                          textAlign: TextAlign.right,
+                          style: GoogleFonts.montserrat(
+                              fontSize: 13,
+                              color: AppConstants.red),
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding:
+                                const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 6),
+                            hintText: '0.00',
+                            hintStyle: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                color: AppConstants.text3),
+                          ),
+                          onChanged: (v) => setState(() =>
+                              _discount =
+                                  double.tryParse(v) ?? 0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(color: AppConstants.border),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('TOPLAM',
+                        style: GoogleFonts.montserrat(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: AppConstants.text1)),
+                    Text(
+                        'TL ${effectiveTotal.toStringAsFixed(2)}',
+                        style: GoogleFonts.montserrat(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                            color: AppConstants.amber)),
+                  ],
+                ),
+                const SizedBox(height: 22),
+                Text('Ödeme Yöntemi',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppConstants.text1)),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: PaymentMethod.values.map((m) {
+                    final sel = _payment == m;
+                    return GestureDetector(
+                      onTap: () =>
+                          setState(() => _payment = m),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: sel
+                              ? AppConstants.amber.withValues(alpha: 0.10)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          border: Border.all(
+                            color: sel
+                                ? AppConstants.amber
+                                : AppConstants.border,
                           ),
                         ),
-                        onPressed: generateBill,
-                        icon: const Icon(Icons.print, color: Colors.white),
-                        label: Text(
-                          "Generate / Print Bill",
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(_paymentIcon(m),
+                                size: 15,
+                                color: sel
+                                    ? AppConstants.amber
+                                    : AppConstants.text2),
+                            const SizedBox(width: 6),
+                            Text(_paymentLabel(m),
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                    color: sel
+                                        ? AppConstants.amber
+                                        : AppConstants.text2)),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (_payment == PaymentMethod.cash) ...[
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Text('Verilen Nakit (TL)',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 12,
+                                  color: AppConstants.text2))),
+                      SizedBox(
+                        width: 110,
+                        child: TextField(
+                          controller: _cashCtrl,
+                          keyboardType:
+                              const TextInputType.numberWithOptions(
+                                  decimal: true),
+                          textAlign: TextAlign.right,
                           style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: AppConstants.text1),
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding:
+                                const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 6),
+                            hintText: '0.00',
+                            hintStyle: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                color: AppConstants.text3),
                           ),
+                          onChanged: (_) => setState(() {}),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (changeDue != null && changeDue >= 0) ...[
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Para Üstü',
+                            style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: AppConstants.green)),
+                        Text(
+                            'TL ${changeDue.toStringAsFixed(2)}',
+                            style: GoogleFonts.montserrat(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: AppConstants.green)),
+                      ],
+                    ),
+                  ] else if (changeDue != null &&
+                      changeDue < 0) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'Yetersiz nakit — TL ${(-changeDue).toStringAsFixed(2)} daha gerekli',
+                      style: GoogleFonts.montserrat(
+                          fontSize: 12, color: AppConstants.red),
+                    ),
+                  ],
+                ],
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _processing
+                            ? null
+                            : () => ReceiptPrinter.printReceipt(
+                                order),
+                        icon: const Icon(Icons.print_outlined,
+                            size: 16),
+                        label: Text('Önizle',
+                            style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      flex: 2,
+                      child: ElevatedButton.icon(
+                        onPressed: (_processing ||
+                                (_payment ==
+                                        PaymentMethod.cash &&
+                                    cashPaid > 0 &&
+                                    cashPaid < effectiveTotal))
+                            ? null
+                            : () => _processPayment(
+                                context,
+                                order,
+                                effectiveDiscount),
+                        icon: _processing
+                            ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.black),
+                              )
+                            : const Icon(
+                                Icons.check_circle_outline,
+                                size: 16),
+                        label: Text('Ödemeyi İşle',
+                            style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppConstants.green,
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 14),
                         ),
                       ),
                     ),
                   ],
                 ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _billRow(String label, double amount) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style: GoogleFonts.montserrat(
+                  fontSize: 12, color: AppConstants.text2)),
+          Text('TL ${amount.toStringAsFixed(2)}',
+              style: GoogleFonts.montserrat(
+                  fontSize: 12, color: AppConstants.text2)),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _processPayment(BuildContext context, Order order,
+      double discount) async {
+    setState(() => _processing = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final orderProvider = context.read<OrderProvider>();
+
+    try {
+      await orderProvider.completeOrder(order.id, _payment,
+          discount: discount);
+
+      final tableQ = await FirebaseFirestore.instance
+          .collection('tables')
+          .where('currentOrderId', isEqualTo: order.id)
+          .limit(1)
+          .get();
+      if (tableQ.docs.isNotEmpty) {
+        await tableQ.docs.first.reference.update({
+          'status': 'cleaning',
+          'currentOrderId': '',
+          'guestCount': 0,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+      }
+
+      await ReceiptPrinter.printReceipt(order);
+
+      if (mounted) {
+        setState(() {
+          _selected = null;
+          _discount = 0;
+          _discountCtrl.clear();
+          _cashCtrl.clear();
+        });
+        messenger.showSnackBar(const SnackBar(
+            content: Text('Ödeme başarıyla işlendi')));
+      }
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(
+            content: Text('Hata: $e'),
+            backgroundColor: AppConstants.red),
+      );
+    } finally {
+      if (mounted) setState(() => _processing = false);
+    }
+  }
+
+  String _paymentLabel(PaymentMethod m) {
+    switch (m) {
+      case PaymentMethod.cash:
+        return 'Nakit';
+      case PaymentMethod.card:
+        return 'Kart';
+      case PaymentMethod.split:
+        return 'Bölüşümlü';
+      case PaymentMethod.online:
+        return 'Online';
+    }
+  }
+
+  IconData _paymentIcon(PaymentMethod m) {
+    switch (m) {
+      case PaymentMethod.cash:
+        return Icons.payments_outlined;
+      case PaymentMethod.card:
+        return Icons.credit_card_outlined;
+      case PaymentMethod.split:
+        return Icons.call_split_outlined;
+      case PaymentMethod.online:
+        return Icons.phone_android_outlined;
+    }
+  }
+
+  String _fmtDt(DateTime dt) {
+    const mo = [
+      'Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz',
+      'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'
+    ];
+    final h = dt.hour.toString().padLeft(2, '0');
+    final m = dt.minute.toString().padLeft(2, '0');
+    return '${mo[dt.month - 1]} ${dt.day}, ${dt.year}  $h:$m';
+  }
+}
+
+String _orderStatusTr(OrderStatus s) {
+  switch (s) {
+    case OrderStatus.ready:
+      return 'HAZIR';
+    case OrderStatus.served:
+      return 'SERVİS';
+    default:
+      return s.name.toUpperCase();
+  }
+}
+
+class _OrderList extends StatelessWidget {
+  final Order? selected;
+  final ValueChanged<Order> onSelect;
+  const _OrderList(
+      {required this.selected, required this.onSelect});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(right: BorderSide(color: AppConstants.border)),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 16, vertical: 14),
+            decoration: const BoxDecoration(
+              border: Border(
+                  bottom:
+                      BorderSide(color: AppConstants.border)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.receipt_long_outlined,
+                    size: 16, color: AppConstants.text2),
+                const SizedBox(width: 8),
+                Text('Hesap Kesilecek',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppConstants.text1)),
+              ],
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .where('status',
+                      whereIn: ['ready', 'served']).snapshots(),
+              builder: (_, snap) {
+                if (snap.hasError) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text('Hata: ${snap.error}',
+                        style: GoogleFonts.montserrat(
+                            fontSize: 13,
+                            color: AppConstants.red)),
+                  );
+                }
+                if (!snap.hasData) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: AppConstants.amber));
+                }
+
+                final orders = snap.data!.docs
+                    .map((d) => Order.fromFirestore(
+                        d.data() as Map<String, dynamic>, d.id))
+                    .toList()
+                  ..sort((a, b) {
+                    if (a.status != b.status) {
+                      return a.status == OrderStatus.ready
+                          ? -1
+                          : 1;
+                    }
+                    return (a.createdAt ?? DateTime(0))
+                        .compareTo(b.createdAt ?? DateTime(0));
+                  });
+
+                if (orders.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment:
+                          MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.receipt_long_outlined,
+                            size: 40,
+                            color: AppConstants.text3),
+                        const SizedBox(height: 12),
+                        Text('Hesap kesilecek sipariş yok',
+                            style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                color: AppConstants.text2)),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Mutfak yemeği hazırladığında\nsiparişi hazır olarak işaretler',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.montserrat(
+                              fontSize: 11,
+                              color: AppConstants.text3),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return ListView.separated(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6),
+                  itemCount: orders.length,
+                  separatorBuilder: (_, __) => const Divider(
+                      height: 1, color: AppConstants.border),
+                  itemBuilder: (ctx, i) => _OrderTile(
+                      order: orders[i],
+                      selected: selected,
+                      onSelect: onSelect),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OrderTile extends StatelessWidget {
+  final Order order;
+  final Order? selected;
+  final ValueChanged<Order> onSelect;
+  const _OrderTile(
+      {required this.order,
+      required this.selected,
+      required this.onSelect});
+
+  @override
+  Widget build(BuildContext context) {
+    final isSel = selected?.id == order.id;
+    final statusColor = order.status == OrderStatus.ready
+        ? AppConstants.green
+        : AppConstants.yellow;
+
+    return InkWell(
+      onTap: () => onSelect(order),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16, vertical: 12),
+        color: isSel
+            ? AppConstants.amber.withValues(alpha: 0.07)
+            : Colors.transparent,
+        child: Row(
+          children: [
+            Container(
+              width: 3,
+              height: 44,
+              decoration: BoxDecoration(
+                color: isSel
+                    ? AppConstants.amber
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text('Masa ${order.tableNo}',
+                          style: GoogleFonts.montserrat(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: isSel
+                                  ? AppConstants.amber
+                                  : AppConstants.text1)),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: statusColor
+                              .withValues(alpha: 0.12),
+                          borderRadius:
+                              BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          _orderStatusTr(order.status),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              color: statusColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    '${order.items.length} ürün  ·  TL ${order.total.toStringAsFixed(2)}',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 12,
+                        color: AppConstants.text2),
+                  ),
+                  if (order.createdAt != null)
+                    Text(
+                      _fmtTime(order.createdAt!),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 11,
+                          color: AppConstants.text3),
+                    ),
+                ],
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _fmtTime(DateTime dt) {
+    final h = dt.hour.toString().padLeft(2, '0');
+    final m = dt.minute.toString().padLeft(2, '0');
+    return '$h:$m';
   }
 }

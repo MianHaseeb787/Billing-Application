@@ -26,5 +26,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:830364758126:ios:46e4cd27f43e646addb67f</string>
+	<key>DATABASE_URL</key>
+	<string>https://dino-dine-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>
