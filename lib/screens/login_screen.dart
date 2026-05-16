@@ -263,5 +263,5 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   TextStyle get _inputStyle =>
-      GoogleFonts.montserrat(fontSize: 14, color: Colors.white);
+      GoogleFonts.montserrat(fontSize: 14, color: Colors.black);
 }
