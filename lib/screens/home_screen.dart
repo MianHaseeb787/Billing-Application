@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final role = auth.user?.role;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           _TopBar(now: _now, auth: auth),
@@ -492,11 +492,11 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFEDE0FF),
         borderRadius: BorderRadius.circular(AppConstants.cardRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: const Color(0xFFD8BFFF).withValues(alpha: 0.5),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -522,14 +522,14 @@ class _StatCard extends StatelessWidget {
                     style: GoogleFonts.montserrat(
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black54,
+                        color: const Color(0xFF6B4FA0),
                         letterSpacing: 0.3)),
                 const SizedBox(height: 3),
                 Text(value,
                     style: GoogleFonts.montserrat(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: Colors.black87),
+                        color: const Color(0xFF111827)),
                     overflow: TextOverflow.ellipsis),
               ],
             ),
@@ -566,11 +566,11 @@ class _NavCard extends StatelessWidget {
           height: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: const Color(0xFFEDE0FF),
             borderRadius: BorderRadius.circular(AppConstants.cardRadius),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
+                color: const Color(0xFFD8BFFF).withValues(alpha: 0.5),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
@@ -596,11 +596,11 @@ class _NavCard extends StatelessWidget {
                       style: GoogleFonts.montserrat(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black87)),
+                          color: const Color(0xFF111827))),
                   const SizedBox(height: 2),
                   Text(def.subtitle,
                       style: GoogleFonts.montserrat(
-                          fontSize: 11, color: Colors.black45)),
+                          fontSize: 11, color: const Color(0xFF6B4FA0))),
                 ],
               ),
             ],
