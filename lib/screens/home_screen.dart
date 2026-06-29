@@ -180,23 +180,22 @@ class _TopBar extends StatelessWidget {
       height: 72,
       padding: const EdgeInsets.symmetric(horizontal: 28),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E3A5F),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
+            color: const Color(0xFF1E3A5F).withValues(alpha: 0.35),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
-          
           Container(
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: const Color(0xFF111827),
+              color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.restaurant_menu,
@@ -212,7 +211,7 @@ class _TopBar extends StatelessWidget {
                 style: GoogleFonts.montserrat(
                   fontSize: 17,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF111827),
+                  color: Colors.white,
                   letterSpacing: -0.3,
                 ),
               ),
@@ -221,18 +220,17 @@ class _TopBar extends StatelessWidget {
                 style: GoogleFonts.montserrat(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF9CA3AF),
+                  color: Colors.white54,
                   letterSpacing: 2,
                 ),
               ),
             ],
           ),
           const Spacer(),
-          
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFFF3F4F6),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -244,7 +242,7 @@ class _TopBar extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF111827),
+                    color: Colors.white,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                 ),
@@ -252,28 +250,27 @@ class _TopBar extends StatelessWidget {
                   _date(now),
                   style: GoogleFonts.montserrat(
                       fontSize: 10,
-                      color: const Color(0xFF6B7280),
+                      color: Colors.white60,
                       fontWeight: FontWeight.w500),
                 ),
               ],
             ),
           ),
           const SizedBox(width: 16),
-          
           if (auth.user != null) ...[
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
+                color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CircleAvatar(
                     radius: 14,
-                    backgroundColor: const Color(0xFF111827),
+                    backgroundColor: Colors.white.withValues(alpha: 0.25),
                     child: Text(
                       auth.user!.name[0].toUpperCase(),
                       style: GoogleFonts.montserrat(
@@ -291,12 +288,12 @@ class _TopBar extends StatelessWidget {
                           style: GoogleFonts.montserrat(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: const Color(0xFF111827))),
+                              color: Colors.white)),
                       Text(auth.user!.role.name.toUpperCase(),
                           style: GoogleFonts.montserrat(
                               fontSize: 9,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF6B7280),
+                              color: Colors.white60,
                               letterSpacing: 1)),
                     ],
                   ),
@@ -305,17 +302,16 @@ class _TopBar extends StatelessWidget {
             ),
             const SizedBox(width: 10),
           ],
-          
           TextButton.icon(
             onPressed: () => _confirmLogout(context),
             icon: const Icon(Icons.logout_outlined,
-                size: 16, color: Color(0xFF6B7280)),
+                size: 16, color: Colors.white70),
             label: Text(
               'Çıkış',
               style: GoogleFonts.montserrat(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF6B7280)),
+                  color: Colors.white70),
             ),
             style: TextButton.styleFrom(
               padding:
@@ -492,15 +488,8 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFFEDE0FF),
+        color: const Color(0xFFDBEAFE),
         borderRadius: BorderRadius.circular(AppConstants.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFD8BFFF).withValues(alpha: 0.5),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Row(
         children: [
@@ -522,7 +511,7 @@ class _StatCard extends StatelessWidget {
                     style: GoogleFonts.montserrat(
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF6B4FA0),
+                        color: const Color(0xFF1E40AF),
                         letterSpacing: 0.3)),
                 const SizedBox(height: 3),
                 Text(value,
@@ -566,15 +555,8 @@ class _NavCard extends StatelessWidget {
           height: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           decoration: BoxDecoration(
-            color: const Color(0xFFEDE0FF),
+            color: const Color(0xFFDBEAFE),
             borderRadius: BorderRadius.circular(AppConstants.cardRadius),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFFD8BFFF).withValues(alpha: 0.5),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-            ],
           ),
           child: Row(
             children: [
