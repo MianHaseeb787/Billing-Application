@@ -488,7 +488,7 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFFDBEAFE),
+        color: const Color(0xFF2563EB),
         borderRadius: BorderRadius.circular(AppConstants.cardRadius),
       ),
       child: Row(
@@ -497,10 +497,10 @@ class _StatCard extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: Colors.white.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, size: 20, color: Colors.black87),
+            child: Icon(icon, size: 20, color: Colors.white),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -511,14 +511,14 @@ class _StatCard extends StatelessWidget {
                     style: GoogleFonts.montserrat(
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF1E40AF),
+                        color: Colors.white70,
                         letterSpacing: 0.3)),
                 const SizedBox(height: 3),
                 Text(value,
                     style: GoogleFonts.montserrat(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF111827)),
+                        color: Colors.white),
                     overflow: TextOverflow.ellipsis),
               ],
             ),
@@ -555,7 +555,7 @@ class _NavCard extends StatelessWidget {
           height: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           decoration: BoxDecoration(
-            color: const Color(0xFFDBEAFE),
+            color: const Color(0xFF2563EB),
             borderRadius: BorderRadius.circular(AppConstants.cardRadius),
           ),
           child: Row(
@@ -564,10 +564,10 @@ class _NavCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: def.color.withValues(alpha: 0.15),
+                  color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(def.icon, size: 30, color: def.color),
+                child: Icon(def.icon, size: 30, color: Colors.white),
               ),
               const SizedBox(width: 14),
               Column(
@@ -578,11 +578,11 @@ class _NavCard extends StatelessWidget {
                       style: GoogleFonts.montserrat(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF111827))),
+                          color: Colors.white)),
                   const SizedBox(height: 2),
                   Text(def.subtitle,
                       style: GoogleFonts.montserrat(
-                          fontSize: 11, color: const Color(0xFF6B4FA0))),
+                          fontSize: 11, color: Colors.white70)),
                 ],
               ),
             ],
