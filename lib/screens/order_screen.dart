@@ -38,30 +38,19 @@ class _OrderBodyState extends State<_OrderBody> {
     final cart = context.watch<CartProvider>();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFFDBEAFE),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF000052),
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x0F000000),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           'Masa ${widget.table.tableNo}  —  Yeni Sipariş',
           style: GoogleFonts.montserrat(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF111827)),
+              color: Colors.white),
         ),
         actions: [
           if (cart.items.isNotEmpty) ...[
@@ -71,18 +60,17 @@ class _OrderBodyState extends State<_OrderBody> {
               padding: const EdgeInsets.symmetric(
                   horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFF111827).withValues(alpha: 0.08),
+                color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                    color: const Color(0xFF111827)
-                        .withValues(alpha: 0.3)),
+                    color: Colors.white.withValues(alpha: 0.3)),
               ),
               child: Text(
                 '${cart.itemCount} ürün',
                 style: GoogleFonts.montserrat(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF111827)),
+                    color: Colors.white),
               ),
             ),
           ],
@@ -125,9 +113,9 @@ class _CategorySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(right: BorderSide(color: Color(0xFFE5E7EB))),
+      decoration: BoxDecoration(
+        color: const Color(0xFF000052),
+        border: Border(right: BorderSide(color: Colors.white.withValues(alpha: 0.12))),
       ),
       child: StreamBuilder<List<menu_model.MenuItem>>(
         stream: svc.getMenuItems(),
@@ -177,12 +165,12 @@ class _CategoryTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: active
-              ? const Color(0xFF111827).withValues(alpha: 0.06)
+              ? Colors.white.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: active
-                ? const Color(0xFF111827).withValues(alpha: 0.3)
+                ? Colors.white.withValues(alpha: 0.25)
                 : Colors.transparent,
           ),
         ),
@@ -193,16 +181,14 @@ class _CategoryTile extends StatelessWidget {
               height: 52,
               decoration: BoxDecoration(
                 color: active
-                    ? const Color(0xFF111827).withValues(alpha: 0.08)
-                    : const Color(0xFFF3F4F6),
+                    ? Colors.white.withValues(alpha: 0.20)
+                    : Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 Icons.restaurant_outlined,
                 size: 22,
-                color: active
-                    ? const Color(0xFF111827)
-                    : const Color(0xFF9CA3AF),
+                color: active ? Colors.white : Colors.white60,
               ),
             ),
             const SizedBox(height: 6),
@@ -213,9 +199,7 @@ class _CategoryTile extends StatelessWidget {
                 fontSize: 11,
                 fontWeight:
                     active ? FontWeight.w600 : FontWeight.normal,
-                color: active
-                    ? const Color(0xFF111827)
-                    : const Color(0xFF6B7280),
+                color: active ? Colors.white : Colors.white60,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -240,7 +224,7 @@ class _MenuGrid extends StatelessWidget {
         if (!snap.hasData) {
           return const Center(
               child: CircularProgressIndicator(
-                  color: Color(0xFF111827)));
+                  color: Color(0xFF000052)));
         }
 
         var items =
@@ -258,7 +242,7 @@ class _MenuGrid extends StatelessWidget {
                   ? 'Menüde ürün yok'
                   : '$category kategorisinde ürün yok',
               style: GoogleFonts.montserrat(
-                  fontSize: 14, color: const Color(0xFF6B7280)),
+                  fontSize: 14, color: const Color(0xFF1E40AF)),
             ),
           );
         }
@@ -310,15 +294,8 @@ class _MenuCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF000052),
           borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
         ),
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -329,13 +306,13 @@ class _MenuCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: 7, vertical: 3),
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
+                color: Colors.white.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(item.category,
                   style: GoogleFonts.montserrat(
                       fontSize: 9,
-                      color: const Color(0xFF9CA3AF),
+                      color: Colors.white60,
                       fontWeight: FontWeight.w500)),
             ),
             Expanded(
@@ -345,7 +322,7 @@ class _MenuCard extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF111827)),
+                      color: Colors.white),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -361,13 +338,13 @@ class _MenuCard extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF111827)),
+                      color: Colors.white),
                 ),
                 Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF111827),
+                    color: Colors.white.withValues(alpha: 0.20),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: const Icon(Icons.add,
@@ -559,7 +536,7 @@ class _Cart extends StatelessWidget {
                           _placeOrder(context, cart),
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                            const Color(0xFF111827),
+                            const Color(0xFF000052),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius:
