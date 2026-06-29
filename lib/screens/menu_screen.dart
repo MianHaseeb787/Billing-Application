@@ -26,30 +26,19 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFFDBEAFE),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF000052),
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x0F000000),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           'Menü Yönetimi',
           style: GoogleFonts.montserrat(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF111827),
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -58,46 +47,48 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
             child: TextField(
               onChanged: (v) => setState(() => _search = v.toLowerCase()),
               style: GoogleFonts.montserrat(
-                  fontSize: 13, color: const Color(0xFF111827)),
+                  fontSize: 13, color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Ürün ara…',
                 hintStyle: GoogleFonts.montserrat(
-                    fontSize: 13, color: const Color(0xFF9CA3AF)),
+                    fontSize: 13, color: Colors.white54),
                 prefixIcon: const Icon(Icons.search,
-                    size: 18, color: Color(0xFF9CA3AF)),
+                    size: 18, color: Colors.white54),
                 isDense: true,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide:
-                      const BorderSide(color: Color(0xFFE5E7EB)),
+                  borderSide: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.25)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide:
-                      const BorderSide(color: Color(0xFFE5E7EB)),
+                  borderSide: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.25)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(
-                      color: Color(0xFF111827), width: 1.5),
+                      color: Colors.white, width: 1.5),
                 ),
                 filled: true,
-                fillColor: const Color(0xFFF3F4F6),
+                fillColor: Colors.white.withValues(alpha: 0.1),
               ),
             ),
           ),
           const SizedBox(width: 12),
           ElevatedButton.icon(
             onPressed: _showAddDialog,
-            icon: const Icon(Icons.add, size: 16),
+            icon: const Icon(Icons.add, size: 16, color: Color(0xFF000052)),
             label: Text('Ürün Ekle',
                 style: GoogleFonts.montserrat(
-                    fontSize: 13, fontWeight: FontWeight.w600)),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF000052))),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF111827),
-              foregroundColor: Colors.white,
+              backgroundColor: Colors.white,
+              foregroundColor: const Color(0xFF000052),
               elevation: 0,
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -119,9 +110,10 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
 
   Widget _buildCategoryPanel() {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(right: BorderSide(color: Color(0xFFE5E7EB))),
+      decoration: BoxDecoration(
+        color: const Color(0xFF000052),
+        border: Border(
+            right: BorderSide(color: Colors.white.withValues(alpha: 0.12))),
       ),
       child: StreamBuilder<QuerySnapshot>(
         stream: _db.collection('menuItems').snapshots(),
@@ -153,7 +145,7 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 2,
-                        color: const Color(0xFF9CA3AF))),
+                        color: Colors.white54)),
               ),
               Expanded(
                 child: ListView.builder(
@@ -182,11 +174,11 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: active
-              ? const Color(0xFF111827).withValues(alpha: 0.06)
+              ? Colors.white.withValues(alpha: 0.15)
               : Colors.transparent,
           border: Border(
             left: BorderSide(
-              color: active ? const Color(0xFF111827) : Colors.transparent,
+              color: active ? Colors.white : Colors.transparent,
               width: 3,
             ),
           ),
@@ -199,9 +191,7 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                 style: GoogleFonts.montserrat(
                   fontSize: 13,
                   fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                  color: active
-                      ? const Color(0xFF111827)
-                      : const Color(0xFF6B7280),
+                  color: active ? Colors.white : Colors.white60,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -213,8 +203,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                 decoration: BoxDecoration(
                   color: active
-                      ? const Color(0xFF111827)
-                      : const Color(0xFFF3F4F6),
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -223,8 +213,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: active
-                        ? Colors.white
-                        : const Color(0xFF9CA3AF),
+                        ? const Color(0xFF000052)
+                        : Colors.white54,
                   ),
                 ),
               ),
@@ -252,7 +242,7 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
         }
         if (!snap.hasData) {
           return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF111827)));
+              child: CircularProgressIndicator(color: Color(0xFF000052)));
         }
 
         var docs = snap.data!.docs;
@@ -279,11 +269,11 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                   width: 72,
                   height: 72,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF3F4F6),
+                    color: Colors.black.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Icon(Icons.restaurant_menu_outlined,
-                      size: 36, color: Color(0xFF9CA3AF)),
+                      size: 36, color: Color(0xFF1E40AF)),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -298,7 +288,7 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                 const SizedBox(height: 6),
                 Text('Yeni bir ürün ekleyerek başlayın',
                     style: GoogleFonts.montserrat(
-                        fontSize: 13, color: const Color(0xFF6B7280))),
+                        fontSize: 13, color: const Color(0xFF1E40AF))),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: _showAddDialog,
@@ -342,7 +332,7 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF111827),
+                      color: const Color(0xFF000052),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text('${docs.length}',
@@ -739,15 +729,8 @@ class _MenuItemCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF000052),
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 14,
-            offset: const Offset(0, 3),
-          ),
-        ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(14),
@@ -771,7 +754,7 @@ class _MenuItemCard extends StatelessWidget {
                           width: 38,
                           height: 38,
                           decoration: BoxDecoration(
-                            color: catColor.withValues(alpha: 0.1),
+                            color: catColor.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(
@@ -790,7 +773,7 @@ class _MenuItemCard extends StatelessWidget {
                                 style: GoogleFonts.montserrat(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF111827),
+                                  color: Colors.white,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -801,7 +784,7 @@ class _MenuItemCard extends StatelessWidget {
                                   desc,
                                   style: GoogleFonts.montserrat(
                                     fontSize: 11,
-                                    color: const Color(0xFF9CA3AF),
+                                    color: Colors.white60,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -825,7 +808,7 @@ class _MenuItemCard extends StatelessWidget {
                                 style: GoogleFonts.montserrat(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF111827),
+                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -840,8 +823,8 @@ class _MenuItemCard extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     color: available
                                         ? const Color(0xFF16A34A)
-                                            .withValues(alpha: 0.1)
-                                        : const Color(0xFFF3F4F6),
+                                            .withValues(alpha: 0.2)
+                                        : Colors.white.withValues(alpha: 0.1),
                                     borderRadius:
                                         BorderRadius.circular(20),
                                   ),
@@ -854,7 +837,7 @@ class _MenuItemCard extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: available
                                               ? const Color(0xFF16A34A)
-                                              : const Color(0xFF9CA3AF),
+                                              : Colors.white54,
                                           shape: BoxShape.circle,
                                         ),
                                       ),
@@ -866,7 +849,7 @@ class _MenuItemCard extends StatelessWidget {
                                           fontWeight: FontWeight.w600,
                                           color: available
                                               ? const Color(0xFF16A34A)
-                                              : const Color(0xFF9CA3AF),
+                                              : Colors.white54,
                                         ),
                                       ),
                                     ],
@@ -880,7 +863,7 @@ class _MenuItemCard extends StatelessWidget {
                           children: [
                             _ActionBtn(
                               icon: Icons.edit_outlined,
-                              color: const Color(0xFF6B7280),
+                              color: Colors.white70,
                               onTap: onEdit,
                             ),
                             const SizedBox(width: 6),
