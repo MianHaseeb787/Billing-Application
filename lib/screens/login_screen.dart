@@ -69,12 +69,12 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFF000052),
       body: Row(
         children: [
           Expanded(
             child: Container(
-              color: const Color(0xFF0A0A0A),
+              color: const Color(0xFF000052),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -121,7 +121,9 @@ class _LoginScreenState extends State<LoginScreen>
             ),
           ),
           Expanded(
-            child: Center(
+            child: Container(
+              color: const Color(0xFFDBEAFE),
+              child: Center(
               child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 380),
                     child: Padding(
@@ -278,6 +280,7 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                 ),
               ),
+            ),
             ),
           ),
         ],
