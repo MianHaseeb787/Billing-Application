@@ -19,42 +19,31 @@ class _TableManagementScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFF000052),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF000052),
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x0F000000),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           'Masa Yönetimi',
           style: GoogleFonts.montserrat(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF111827),
+            color: Colors.white,
           ),
         ),
         actions: [
           TextButton.icon(
             onPressed: () => _addTable(context),
             icon: const Icon(Icons.add,
-                size: 16, color: Color(0xFFD97706)),
+                size: 16, color: Colors.white70),
             label: Text('Masa Ekle',
                 style: GoogleFonts.montserrat(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFFD97706))),
+                    color: Colors.white70)),
           ),
           const SizedBox(width: 8),
         ],
@@ -72,9 +61,11 @@ class _TableManagementScreenState
     return Container(
       height: 52,
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
+      decoration: BoxDecoration(
+        color: const Color(0xFF000052),
+        border: Border(
+            bottom: BorderSide(
+                color: Colors.white.withValues(alpha: 0.12))),
       ),
       child: Row(
         children: [
@@ -109,12 +100,13 @@ class _TableManagementScreenState
             const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: active
-              ? const Color(0xFF111827).withValues(alpha: 0.08)
+              ? Colors.white.withValues(alpha: 0.2)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color:
-                active ? const Color(0xFF111827) : const Color(0xFFE5E7EB),
+            color: active
+                ? Colors.white
+                : Colors.white.withValues(alpha: 0.3),
           ),
         ),
         child: Text(
@@ -122,9 +114,7 @@ class _TableManagementScreenState
           style: GoogleFonts.montserrat(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: active
-                ? const Color(0xFF111827)
-                : const Color(0xFF6B7280),
+            color: active ? Colors.white : Colors.white60,
           ),
         ),
       ),
@@ -143,7 +133,7 @@ class _TableManagementScreenState
         const SizedBox(width: 5),
         Text(label,
             style: GoogleFonts.montserrat(
-                fontSize: 11, color: const Color(0xFF9CA3AF))),
+                fontSize: 11, color: Colors.white60)),
       ],
     );
   }
@@ -165,7 +155,7 @@ class _TableManagementScreenState
         if (!snap.hasData) {
           return const Center(
               child: CircularProgressIndicator(
-                  color: Color(0xFF111827)));
+                  color: Colors.white));
         }
 
         var tables = snap.data!.docs
@@ -183,15 +173,16 @@ class _TableManagementScreenState
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.table_restaurant_outlined,
-                    size: 56, color: Color(0xFF9CA3AF)),
+                Icon(Icons.table_restaurant_outlined,
+                    size: 56,
+                    color: Colors.white.withValues(alpha: 0.4)),
                 const SizedBox(height: 12),
                 Text(
                   _filter == null
                       ? 'Masa yapılandırılmadı. Başlamak için "Masa Ekle"ye dokunun.'
                       : 'Bu durumda masa yok.',
                   style: GoogleFonts.montserrat(
-                      fontSize: 14, color: const Color(0xFF6B7280)),
+                      fontSize: 14, color: Colors.white60),
                 ),
               ],
             ),
@@ -598,18 +589,11 @@ class _TableCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFFDBEAFE),
           borderRadius: BorderRadius.circular(14),
           border: isUrgent
               ? Border.all(color: const Color(0xFFDC2626), width: 2)
               : Border.all(color: color.withValues(alpha: 0.35)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -653,12 +637,12 @@ class _TableCard extends StatelessWidget {
                 if (table.guestCount > 0)
                   Row(children: [
                     const Icon(Icons.person_outlined,
-                        size: 11, color: Color(0xFF9CA3AF)),
+                        size: 11, color: Color(0xFF1E40AF)),
                     const SizedBox(width: 2),
                     Text('${table.guestCount}',
                         style: GoogleFonts.montserrat(
                             fontSize: 11,
-                            color: const Color(0xFF9CA3AF))),
+                            color: const Color(0xFF1E40AF))),
                   ])
                 else
                   const SizedBox.shrink(),
@@ -668,14 +652,14 @@ class _TableCard extends StatelessWidget {
                         size: 11,
                         color: isUrgent
                             ? const Color(0xFFDC2626)
-                            : const Color(0xFF9CA3AF)),
+                            : const Color(0xFF1E40AF)),
                     const SizedBox(width: 2),
                     Text(elapsed,
                         style: GoogleFonts.montserrat(
                             fontSize: 11,
                             color: isUrgent
                                 ? const Color(0xFFDC2626)
-                                : const Color(0xFF9CA3AF),
+                                : const Color(0xFF1E40AF),
                             fontWeight: isUrgent
                                 ? FontWeight.w600
                                 : FontWeight.normal)),
