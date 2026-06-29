@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart' hide Order;
 import 'package:provider/provider.dart';
 import '../models/order.dart';
 import '../providers/order_provider.dart';
-import '../utils/constants.dart';
 import '../utils/receipt_printer.dart';
 
 class GenerateBillScreen extends StatefulWidget {
@@ -33,8 +32,33 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.bg,
-      appBar: AppBar(title: const Text('Hesap Kes')),
+      backgroundColor: const Color(0xFFEDE0FF),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x0F000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        title: Text(
+          'Hesap Kes',
+          style: GoogleFonts.montserrat(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF111827),
+          ),
+        ),
+      ),
       body: Row(
         children: [
           SizedBox(
@@ -63,16 +87,16 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.touch_app_outlined,
-                size: 52, color: AppConstants.text3),
+                size: 52, color: Color(0xFF9CA3AF)),
             const SizedBox(height: 14),
             Text('Hesap kesmek için sipariş seçin',
                 style: GoogleFonts.montserrat(
-                    fontSize: 15, color: AppConstants.text2)),
+                    fontSize: 15, color: const Color(0xFF6B7280))),
             const SizedBox(height: 4),
             Text(
                 'Mutfak hazır olarak işaretlediğinde siparişler görünür',
                 style: GoogleFonts.montserrat(
-                    fontSize: 12, color: AppConstants.text3)),
+                    fontSize: 12, color: const Color(0xFF9CA3AF))),
           ],
         ),
       );
@@ -91,6 +115,25 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
             ? cashPaid - effectiveTotal
             : null;
 
+    final inlineInputDecoration = InputDecoration(
+      isDense: true,
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      filled: true,
+      fillColor: const Color(0xFFF3F4F6),
+      hintStyle: GoogleFonts.montserrat(
+          fontSize: 13, color: const Color(0xFF9CA3AF)),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:
+            const BorderSide(color: Color(0xFF111827), width: 1.5),
+      ),
+    );
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Center(
@@ -100,10 +143,10 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+              borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: AppConstants.purple.withValues(alpha: 0.12),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 16,
                   offset: const Offset(0, 4),
                 ),
@@ -115,20 +158,20 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                 Center(
                   child: Column(
                     children: [
-                      Text('DinO Dine',
+                      Text('Dijital Adisyon',
                           style: GoogleFonts.montserrat(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
-                              color: AppConstants.text1,
+                              color: const Color(0xFF111827),
                               letterSpacing: -0.5)),
                       const SizedBox(height: 2),
                       Text('Restoran POS',
                           style: GoogleFonts.montserrat(
                               fontSize: 11,
-                              color: AppConstants.text3,
+                              color: const Color(0xFF9CA3AF),
                               letterSpacing: 2)),
                       const SizedBox(height: 14),
-                      const Divider(color: AppConstants.border),
+                      const Divider(color: Color(0xFFE5E7EB)),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment:
@@ -138,13 +181,13 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                               style: GoogleFonts.montserrat(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  color: AppConstants.text1)),
+                                  color: const Color(0xFF111827))),
                           Text(
                               'Sipariş #${order.id.substring(0, 6).toUpperCase()}',
                               style: GoogleFonts.montserrat(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  color: AppConstants.text1)),
+                                  color: const Color(0xFF111827))),
                         ],
                       ),
                       if (order.createdAt != null) ...[
@@ -154,14 +197,14 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                           child: Text(_fmtDt(order.createdAt!),
                               style: GoogleFonts.montserrat(
                                   fontSize: 11,
-                                  color: AppConstants.text3)),
+                                  color: const Color(0xFF9CA3AF))),
                         ),
                       ],
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Divider(color: AppConstants.border),
+                const Divider(color: Color(0xFFE5E7EB)),
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -169,28 +212,31 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                         child: Text('Ürün',
                             style: GoogleFonts.montserrat(
                                 fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: AppConstants.text3))),
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 2,
+                                color: const Color(0xFF9CA3AF)))),
                     SizedBox(
                         width: 40,
                         child: Text('Adet',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.montserrat(
                                 fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: AppConstants.text3))),
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 2,
+                                color: const Color(0xFF9CA3AF)))),
                     SizedBox(
                         width: 90,
                         child: Text('Tutar',
                             textAlign: TextAlign.right,
                             style: GoogleFonts.montserrat(
                                 fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: AppConstants.text3))),
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 2,
+                                color: const Color(0xFF9CA3AF)))),
                   ],
                 ),
                 const Divider(
-                    height: 12, color: AppConstants.border),
+                    height: 12, color: Color(0xFFE5E7EB)),
                 ...order.items.map((item) => Padding(
                       padding:
                           const EdgeInsets.symmetric(vertical: 5),
@@ -200,14 +246,16 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                               child: Text(item.name,
                                   style: GoogleFonts.montserrat(
                                       fontSize: 13,
-                                      color: AppConstants.text1))),
+                                      color: const Color(
+                                          0xFF111827)))),
                           SizedBox(
                               width: 40,
                               child: Text('×${item.quantity}',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.montserrat(
                                       fontSize: 13,
-                                      color: AppConstants.text2))),
+                                      color: const Color(
+                                          0xFF6B7280)))),
                           SizedBox(
                               width: 90,
                               child: Text(
@@ -215,12 +263,13 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                                   textAlign: TextAlign.right,
                                   style: GoogleFonts.montserrat(
                                       fontSize: 13,
-                                      color: AppConstants.text1))),
+                                      color: const Color(
+                                          0xFF111827)))),
                         ],
                       ),
                     )),
                 const SizedBox(height: 8),
-                const Divider(color: AppConstants.border),
+                const Divider(color: Color(0xFFE5E7EB)),
                 const SizedBox(height: 6),
                 _billRow('Ara Toplam', order.subtotal),
                 _billRow('KDV (%15)', order.tax),
@@ -235,7 +284,7 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                           child: Text('İndirim (TL)',
                               style: GoogleFonts.montserrat(
                                   fontSize: 12,
-                                  color: AppConstants.text2))),
+                                  color: const Color(0xFF6B7280)))),
                       SizedBox(
                         width: 100,
                         child: TextField(
@@ -246,16 +295,9 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                           textAlign: TextAlign.right,
                           style: GoogleFonts.montserrat(
                               fontSize: 13,
-                              color: AppConstants.red),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding:
-                                const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 6),
+                              color: const Color(0xFFDC2626)),
+                          decoration: inlineInputDecoration.copyWith(
                             hintText: '0.00',
-                            hintStyle: GoogleFonts.montserrat(
-                                fontSize: 13,
-                                color: AppConstants.text3),
                           ),
                           onChanged: (v) => setState(() =>
                               _discount =
@@ -265,7 +307,7 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                     ],
                   ),
                 ),
-                const Divider(color: AppConstants.border),
+                const Divider(color: Color(0xFFE5E7EB)),
                 const SizedBox(height: 6),
                 Row(
                   mainAxisAlignment:
@@ -275,21 +317,22 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                         style: GoogleFonts.montserrat(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: AppConstants.text1)),
+                            color: const Color(0xFF111827))),
                     Text(
                         'TL ${effectiveTotal.toStringAsFixed(2)}',
                         style: GoogleFonts.montserrat(
                             fontSize: 24,
                             fontWeight: FontWeight.w800,
-                            color: AppConstants.amber)),
+                            color: const Color(0xFF111827))),
                   ],
                 ),
                 const SizedBox(height: 22),
                 Text('Ödeme Yöntemi',
                     style: GoogleFonts.montserrat(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppConstants.text1)),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2,
+                        color: const Color(0xFF9CA3AF))),
                 const SizedBox(height: 10),
                 Wrap(
                   spacing: 8,
@@ -304,13 +347,15 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                             horizontal: 14, vertical: 8),
                         decoration: BoxDecoration(
                           color: sel
-                              ? AppConstants.amber.withValues(alpha: 0.10)
+                              ? const Color(0xFF111827)
+                                  .withValues(alpha: 0.08)
                               : Colors.white,
-                          borderRadius: BorderRadius.circular(28),
+                          borderRadius:
+                              BorderRadius.circular(20),
                           border: Border.all(
                             color: sel
-                                ? AppConstants.amber
-                                : AppConstants.border,
+                                ? const Color(0xFF111827)
+                                : const Color(0xFFE5E7EB),
                           ),
                         ),
                         child: Row(
@@ -319,16 +364,17 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                             Icon(_paymentIcon(m),
                                 size: 15,
                                 color: sel
-                                    ? AppConstants.amber
-                                    : AppConstants.text2),
+                                    ? const Color(0xFF111827)
+                                    : const Color(0xFF6B7280)),
                             const SizedBox(width: 6),
                             Text(_paymentLabel(m),
                                 style: GoogleFonts.montserrat(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
                                     color: sel
-                                        ? AppConstants.amber
-                                        : AppConstants.text2)),
+                                        ? const Color(0xFF111827)
+                                        : const Color(
+                                            0xFF6B7280))),
                           ],
                         ),
                       ),
@@ -343,7 +389,8 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                           child: Text('Verilen Nakit (TL)',
                               style: GoogleFonts.montserrat(
                                   fontSize: 12,
-                                  color: AppConstants.text2))),
+                                  color: const Color(
+                                      0xFF6B7280)))),
                       SizedBox(
                         width: 110,
                         child: TextField(
@@ -354,16 +401,9 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                           textAlign: TextAlign.right,
                           style: GoogleFonts.montserrat(
                               fontSize: 13,
-                              color: AppConstants.text1),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding:
-                                const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 6),
+                              color: const Color(0xFF111827)),
+                          decoration: inlineInputDecoration.copyWith(
                             hintText: '0.00',
-                            hintStyle: GoogleFonts.montserrat(
-                                fontSize: 13,
-                                color: AppConstants.text3),
                           ),
                           onChanged: (_) => setState(() {}),
                         ),
@@ -380,13 +420,13 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: AppConstants.green)),
+                                color: const Color(0xFF16A34A))),
                         Text(
                             'TL ${changeDue.toStringAsFixed(2)}',
                             style: GoogleFonts.montserrat(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
-                                color: AppConstants.green)),
+                                color: const Color(0xFF16A34A))),
                       ],
                     ),
                   ] else if (changeDue != null &&
@@ -395,7 +435,8 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                     Text(
                       'Yetersiz nakit — TL ${(-changeDue).toStringAsFixed(2)} daha gerekli',
                       style: GoogleFonts.montserrat(
-                          fontSize: 12, color: AppConstants.red),
+                          fontSize: 12,
+                          color: const Color(0xFFDC2626)),
                     ),
                   ],
                 ],
@@ -408,6 +449,17 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                             ? null
                             : () => ReceiptPrinter.printReceipt(
                                 order),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor:
+                              const Color(0xFF111827),
+                          side: const BorderSide(
+                              color: Color(0xFFE5E7EB)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12),
+                        ),
                         icon: const Icon(Icons.print_outlined,
                             size: 16),
                         label: Text('Önizle',
@@ -430,13 +482,24 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                                 context,
                                 order,
                                 effectiveDiscount),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color(0xFF16A34A),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 14),
+                          elevation: 0,
+                        ),
                         icon: _processing
                             ? const SizedBox(
                                 width: 16,
                                 height: 16,
                                 child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    color: Colors.black),
+                                    color: Colors.white),
                               )
                             : const Icon(
                                 Icons.check_circle_outline,
@@ -445,12 +508,6 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConstants.green,
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 14),
-                        ),
                       ),
                     ),
                   ],
@@ -471,10 +528,10 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
         children: [
           Text(label,
               style: GoogleFonts.montserrat(
-                  fontSize: 12, color: AppConstants.text2)),
+                  fontSize: 12, color: const Color(0xFF6B7280))),
           Text('TL ${amount.toStringAsFixed(2)}',
               style: GoogleFonts.montserrat(
-                  fontSize: 12, color: AppConstants.text2)),
+                  fontSize: 12, color: const Color(0xFF6B7280))),
         ],
       ),
     );
@@ -520,7 +577,7 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
       messenger.showSnackBar(
         SnackBar(
             content: Text('Hata: $e'),
-            backgroundColor: AppConstants.red),
+            backgroundColor: const Color(0xFFDC2626)),
       );
     } finally {
       if (mounted) setState(() => _processing = false);
@@ -586,7 +643,7 @@ class _OrderList extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(right: BorderSide(color: AppConstants.border)),
+        border: Border(right: BorderSide(color: Color(0xFFE5E7EB))),
       ),
       child: Column(
         children: [
@@ -596,18 +653,18 @@ class _OrderList extends StatelessWidget {
             decoration: const BoxDecoration(
               border: Border(
                   bottom:
-                      BorderSide(color: AppConstants.border)),
+                      BorderSide(color: Color(0xFFE5E7EB))),
             ),
             child: Row(
               children: [
                 const Icon(Icons.receipt_long_outlined,
-                    size: 16, color: AppConstants.text2),
+                    size: 16, color: Color(0xFF6B7280)),
                 const SizedBox(width: 8),
                 Text('Hesap Kesilecek',
                     style: GoogleFonts.montserrat(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: AppConstants.text1)),
+                        color: const Color(0xFF111827))),
               ],
             ),
           ),
@@ -624,13 +681,13 @@ class _OrderList extends StatelessWidget {
                     child: Text('Hata: ${snap.error}',
                         style: GoogleFonts.montserrat(
                             fontSize: 13,
-                            color: AppConstants.red)),
+                            color: const Color(0xFFDC2626))),
                   );
                 }
                 if (!snap.hasData) {
                   return const Center(
                       child: CircularProgressIndicator(
-                          color: AppConstants.amber));
+                          color: Color(0xFF111827)));
                 }
 
                 final orders = snap.data!.docs
@@ -655,19 +712,19 @@ class _OrderList extends StatelessWidget {
                       children: [
                         const Icon(Icons.receipt_long_outlined,
                             size: 40,
-                            color: AppConstants.text3),
+                            color: Color(0xFF9CA3AF)),
                         const SizedBox(height: 12),
                         Text('Hesap kesilecek sipariş yok',
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
-                                color: AppConstants.text2)),
+                                color: const Color(0xFF6B7280))),
                         const SizedBox(height: 4),
                         Text(
                           'Mutfak yemeği hazırladığında\nsiparişi hazır olarak işaretler',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.montserrat(
                               fontSize: 11,
-                              color: AppConstants.text3),
+                              color: const Color(0xFF9CA3AF)),
                         ),
                       ],
                     ),
@@ -679,7 +736,7 @@ class _OrderList extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 6),
                   itemCount: orders.length,
                   separatorBuilder: (_, __) => const Divider(
-                      height: 1, color: AppConstants.border),
+                      height: 1, color: Color(0xFFE5E7EB)),
                   itemBuilder: (ctx, i) => _OrderTile(
                       order: orders[i],
                       selected: selected,
@@ -707,8 +764,8 @@ class _OrderTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSel = selected?.id == order.id;
     final statusColor = order.status == OrderStatus.ready
-        ? AppConstants.green
-        : AppConstants.yellow;
+        ? const Color(0xFF16A34A)
+        : const Color(0xFFD97706);
 
     return InkWell(
       onTap: () => onSelect(order),
@@ -716,7 +773,7 @@ class _OrderTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
             horizontal: 16, vertical: 12),
         color: isSel
-            ? AppConstants.amber.withValues(alpha: 0.07)
+            ? const Color(0xFF111827).withValues(alpha: 0.05)
             : Colors.transparent,
         child: Row(
           children: [
@@ -725,7 +782,7 @@ class _OrderTile extends StatelessWidget {
               height: 44,
               decoration: BoxDecoration(
                 color: isSel
-                    ? AppConstants.amber
+                    ? const Color(0xFF111827)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -742,17 +799,17 @@ class _OrderTile extends StatelessWidget {
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: isSel
-                                  ? AppConstants.amber
-                                  : AppConstants.text1)),
+                                  ? const Color(0xFF111827)
+                                  : const Color(0xFF111827))),
                       const Spacer(),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
+                            horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: statusColor
                               .withValues(alpha: 0.12),
                           borderRadius:
-                              BorderRadius.circular(4),
+                              BorderRadius.circular(20),
                         ),
                         child: Text(
                           _orderStatusTr(order.status),
@@ -769,14 +826,14 @@ class _OrderTile extends StatelessWidget {
                     '${order.items.length} ürün  ·  TL ${order.total.toStringAsFixed(2)}',
                     style: GoogleFonts.montserrat(
                         fontSize: 12,
-                        color: AppConstants.text2),
+                        color: const Color(0xFF6B7280)),
                   ),
                   if (order.createdAt != null)
                     Text(
                       _fmtTime(order.createdAt!),
                       style: GoogleFonts.montserrat(
                           fontSize: 11,
-                          color: AppConstants.text3),
+                          color: const Color(0xFF9CA3AF)),
                     ),
                 ],
               ),

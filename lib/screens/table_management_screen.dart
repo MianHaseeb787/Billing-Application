@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/table_model.dart';
-import '../utils/constants.dart';
 import 'order_screen.dart';
 
 class TableManagementScreen extends StatefulWidget {
@@ -20,19 +19,42 @@ class _TableManagementScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.bg,
+      backgroundColor: const Color(0xFFEDE0FF),
       appBar: AppBar(
-        title: const Text('Masa Yönetimi'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x0F000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        title: Text(
+          'Masa Yönetimi',
+          style: GoogleFonts.montserrat(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF111827),
+          ),
+        ),
         actions: [
           TextButton.icon(
             onPressed: () => _addTable(context),
             icon: const Icon(Icons.add,
-                size: 16, color: AppConstants.amber),
+                size: 16, color: Color(0xFFD97706)),
             label: Text('Masa Ekle',
                 style: GoogleFonts.montserrat(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: AppConstants.amber)),
+                    color: const Color(0xFFD97706))),
           ),
           const SizedBox(width: 8),
         ],
@@ -52,7 +74,7 @@ class _TableManagementScreenState
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(bottom: BorderSide(color: AppConstants.border)),
+        border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
       ),
       child: Row(
         children: [
@@ -66,13 +88,13 @@ class _TableManagementScreenState
           const SizedBox(width: 8),
           _chip('Temizleniyor', TableStatus.cleaning),
           const Spacer(),
-          _legend(AppConstants.green, 'Boş'),
+          _legend(const Color(0xFF16A34A), 'Boş'),
           const SizedBox(width: 16),
-          _legend(AppConstants.red, 'Dolu'),
+          _legend(const Color(0xFFDC2626), 'Dolu'),
           const SizedBox(width: 16),
-          _legend(AppConstants.yellow, 'Rezerve'),
+          _legend(const Color(0xFFD97706), 'Rezerve'),
           const SizedBox(width: 16),
-          _legend(AppConstants.text3, 'Temizleniyor'),
+          _legend(const Color(0xFF9CA3AF), 'Temizleniyor'),
         ],
       ),
     );
@@ -87,12 +109,12 @@ class _TableManagementScreenState
             const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: active
-              ? AppConstants.amber.withValues(alpha: 0.15)
+              ? const Color(0xFF111827).withValues(alpha: 0.08)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color:
-                active ? AppConstants.amber : AppConstants.border,
+                active ? const Color(0xFF111827) : const Color(0xFFE5E7EB),
           ),
         ),
         child: Text(
@@ -101,8 +123,8 @@ class _TableManagementScreenState
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: active
-                ? AppConstants.amber
-                : AppConstants.text2,
+                ? const Color(0xFF111827)
+                : const Color(0xFF6B7280),
           ),
         ),
       ),
@@ -121,7 +143,7 @@ class _TableManagementScreenState
         const SizedBox(width: 5),
         Text(label,
             style: GoogleFonts.montserrat(
-                fontSize: 11, color: AppConstants.text3)),
+                fontSize: 11, color: const Color(0xFF9CA3AF))),
       ],
     );
   }
@@ -137,13 +159,13 @@ class _TableManagementScreenState
           return Center(
             child: Text('Hata: ${snap.error}',
                 style:
-                    GoogleFonts.montserrat(color: AppConstants.red)),
+                    GoogleFonts.montserrat(color: const Color(0xFFDC2626))),
           );
         }
         if (!snap.hasData) {
           return const Center(
               child: CircularProgressIndicator(
-                  color: AppConstants.amber));
+                  color: Color(0xFF111827)));
         }
 
         var tables = snap.data!.docs
@@ -162,14 +184,14 @@ class _TableManagementScreenState
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.table_restaurant_outlined,
-                    size: 56, color: AppConstants.text3),
+                    size: 56, color: Color(0xFF9CA3AF)),
                 const SizedBox(height: 12),
                 Text(
                   _filter == null
                       ? 'Masa yapılandırılmadı. Başlamak için "Masa Ekle"ye dokunun.'
                       : 'Bu durumda masa yok.',
                   style: GoogleFonts.montserrat(
-                      fontSize: 14, color: AppConstants.text2),
+                      fontSize: 14, color: const Color(0xFF6B7280)),
                 ),
               ],
             ),
@@ -213,27 +235,55 @@ class _TableManagementScreenState
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14)),
         title: Text('Masa ${table.tableNo} Aç',
             style: GoogleFonts.montserrat(
                 fontWeight: FontWeight.w600,
-                color: AppConstants.text1)),
+                color: const Color(0xFF111827))),
         content: TextFormField(
           controller: ctrl,
           keyboardType: TextInputType.number,
           autofocus: true,
-          style: GoogleFonts.montserrat(color: AppConstants.text1),
-          decoration: const InputDecoration(
-              labelText: 'Misafir sayısı',
-              prefixIcon: Icon(Icons.people_outlined,
-                  size: 18, color: AppConstants.text2)),
+          style: GoogleFonts.montserrat(color: const Color(0xFF111827)),
+          decoration: InputDecoration(
+            labelText: 'Misafir sayısı',
+            labelStyle: GoogleFonts.montserrat(
+                color: const Color(0xFF9CA3AF), fontSize: 14),
+            filled: true,
+            fillColor: const Color(0xFFF3F4F6),
+            prefixIcon: const Icon(Icons.people_outlined,
+                size: 18, color: Color(0xFF6B7280)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: Color(0xFFE5E7EB)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Color(0xFF111827), width: 1.5),
+            ),
+          ),
         ),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('İptal')),
+              child: Text('İptal',
+                  style: GoogleFonts.montserrat(
+                      color: const Color(0xFF6B7280)))),
           ElevatedButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Aç')),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF111827),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text('Aç',
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600))),
         ],
       ),
     );
@@ -263,6 +313,10 @@ class _TableManagementScreenState
       BuildContext context, RestaurantTable table) {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.vertical(top: Radius.circular(14))),
       builder: (ctx) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -272,7 +326,7 @@ class _TableManagementScreenState
               height: 4,
               margin: const EdgeInsets.only(top: 12, bottom: 8),
               decoration: BoxDecoration(
-                  color: AppConstants.border,
+                  color: const Color(0xFFE5E7EB),
                   borderRadius: BorderRadius.circular(2)),
             ),
             Padding(
@@ -284,19 +338,19 @@ class _TableManagementScreenState
                       style: GoogleFonts.montserrat(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: AppConstants.text1)),
+                          color: const Color(0xFF111827))),
                   const Spacer(),
                   _StatusBadge(table.status),
                 ],
               ),
             ),
-            const Divider(height: 1),
+            const Divider(height: 1, color: Color(0xFFE5E7EB)),
             ListTile(
               leading: const Icon(Icons.add_shopping_cart_outlined,
-                  color: AppConstants.amber, size: 20),
+                  color: Color(0xFF111827), size: 20),
               title: Text('Ürün Ekle / Görüntüle',
                   style: GoogleFonts.montserrat(
-                      fontSize: 14, color: AppConstants.text1)),
+                      fontSize: 14, color: const Color(0xFF111827))),
               onTap: () {
                 Navigator.pop(ctx);
                 Navigator.push(
@@ -310,11 +364,11 @@ class _TableManagementScreenState
             if (table.status == TableStatus.occupied)
               ListTile(
                 leading: const Icon(Icons.check_circle_outline,
-                    color: AppConstants.green, size: 20),
+                    color: Color(0xFF16A34A), size: 20),
                 title: Text('Boş Olarak İşaretle',
                     style: GoogleFonts.montserrat(
                         fontSize: 14,
-                        color: AppConstants.text1)),
+                        color: const Color(0xFF111827))),
                 onTap: () async {
                   Navigator.pop(ctx);
                   await FirebaseFirestore.instance
@@ -331,11 +385,11 @@ class _TableManagementScreenState
             if (table.status == TableStatus.available)
               ListTile(
                 leading: const Icon(Icons.event_seat_outlined,
-                    color: AppConstants.yellow, size: 20),
+                    color: Color(0xFFD97706), size: 20),
                 title: Text('Rezerve Olarak İşaretle',
                     style: GoogleFonts.montserrat(
                         fontSize: 14,
-                        color: AppConstants.text1)),
+                        color: const Color(0xFF111827))),
                 onTap: () async {
                   Navigator.pop(ctx);
                   await FirebaseFirestore.instance
@@ -350,11 +404,11 @@ class _TableManagementScreenState
             ListTile(
               leading: const Icon(
                   Icons.cleaning_services_outlined,
-                  color: AppConstants.text2,
+                  color: Color(0xFF6B7280),
                   size: 20),
               title: Text('Temizleniyor Olarak İşaretle',
                   style: GoogleFonts.montserrat(
-                      fontSize: 14, color: AppConstants.text1)),
+                      fontSize: 14, color: const Color(0xFF111827))),
               onTap: () async {
                 Navigator.pop(ctx);
                 await FirebaseFirestore.instance
@@ -369,34 +423,45 @@ class _TableManagementScreenState
             ),
             ListTile(
               leading: const Icon(Icons.delete_outline,
-                  color: AppConstants.red, size: 20),
+                  color: Color(0xFFDC2626), size: 20),
               title: Text('Masayı Kaldır',
                   style: GoogleFonts.montserrat(
-                      fontSize: 14, color: AppConstants.red)),
+                      fontSize: 14, color: const Color(0xFFDC2626))),
               onTap: () async {
                 Navigator.pop(ctx);
                 final sure = await showDialog<bool>(
                   context: context,
                   builder: (d) => AlertDialog(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14)),
                     title: Text(
                         'Masa ${table.tableNo} Kaldır',
                         style: GoogleFonts.montserrat(
-                            color: AppConstants.text1)),
+                            color: const Color(0xFF111827))),
                     content: Text('Bu işlem geri alınamaz.',
                         style: GoogleFonts.montserrat(
-                            color: AppConstants.text2)),
+                            color: const Color(0xFF6B7280))),
                     actions: [
                       TextButton(
                           onPressed: () =>
                               Navigator.pop(d, false),
-                          child: const Text('İptal')),
+                          child: Text('İptal',
+                              style: GoogleFonts.montserrat(
+                                  color: const Color(0xFF6B7280)))),
                       ElevatedButton(
                         onPressed: () =>
                             Navigator.pop(d, true),
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: AppConstants.red,
-                            foregroundColor: Colors.white),
-                        child: const Text('Kaldır'),
+                            backgroundColor:
+                                const Color(0xFFDC2626),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(10))),
+                        child: Text('Kaldır',
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600)),
                       ),
                     ],
                   ),
@@ -421,22 +486,43 @@ class _TableManagementScreenState
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14)),
         title: Text('Yeni Masa Ekle',
             style: GoogleFonts.montserrat(
                 fontWeight: FontWeight.w600,
-                color: AppConstants.text1)),
+                color: const Color(0xFF111827))),
         content: TextFormField(
           controller: ctrl,
           keyboardType: TextInputType.number,
           autofocus: true,
-          style: GoogleFonts.montserrat(color: AppConstants.text1),
-          decoration: const InputDecoration(
-              labelText: 'Masa Numarası (örn. 7)'),
+          style: GoogleFonts.montserrat(
+              color: const Color(0xFF111827)),
+          decoration: InputDecoration(
+            labelText: 'Masa Numarası (örn. 7)',
+            labelStyle: GoogleFonts.montserrat(
+                color: const Color(0xFF9CA3AF), fontSize: 14),
+            filled: true,
+            fillColor: const Color(0xFFF3F4F6),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: Color(0xFFE5E7EB)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Color(0xFF111827), width: 1.5),
+            ),
+          ),
         ),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('İptal')),
+              child: Text('İptal',
+                  style: GoogleFonts.montserrat(
+                      color: const Color(0xFF6B7280)))),
           ElevatedButton(
             onPressed: () {
               final num = int.tryParse(ctrl.text.trim());
@@ -453,7 +539,15 @@ class _TableManagementScreenState
                 Navigator.pop(ctx);
               }
             },
-            child: const Text('Ekle'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF111827),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            child: Text('Ekle',
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -500,21 +594,20 @@ class _TableCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       onLongPress: onOptions,
-      borderRadius:
-          BorderRadius.circular(AppConstants.cardRadius),
+      borderRadius: BorderRadius.circular(14),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+          borderRadius: BorderRadius.circular(14),
           border: isUrgent
-              ? Border.all(color: AppConstants.red, width: 2)
+              ? Border.all(color: const Color(0xFFDC2626), width: 2)
               : Border.all(color: color.withValues(alpha: 0.35)),
           boxShadow: [
             BoxShadow(
-              color: AppConstants.purple.withValues(alpha: 0.10),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -529,7 +622,7 @@ class _TableCard extends StatelessWidget {
                     style: GoogleFonts.montserrat(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: AppConstants.text1)),
+                        color: const Color(0xFF111827))),
                 Container(
                   width: 9,
                   height: 9,
@@ -543,7 +636,7 @@ class _TableCard extends StatelessWidget {
                   horizontal: 7, vertical: 3),
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 _tableStatusTr(table.status),
@@ -560,12 +653,12 @@ class _TableCard extends StatelessWidget {
                 if (table.guestCount > 0)
                   Row(children: [
                     const Icon(Icons.person_outlined,
-                        size: 11, color: AppConstants.text3),
+                        size: 11, color: Color(0xFF9CA3AF)),
                     const SizedBox(width: 2),
                     Text('${table.guestCount}',
                         style: GoogleFonts.montserrat(
                             fontSize: 11,
-                            color: AppConstants.text3)),
+                            color: const Color(0xFF9CA3AF))),
                   ])
                 else
                   const SizedBox.shrink(),
@@ -574,15 +667,15 @@ class _TableCard extends StatelessWidget {
                     Icon(Icons.timer_outlined,
                         size: 11,
                         color: isUrgent
-                            ? AppConstants.red
-                            : AppConstants.text3),
+                            ? const Color(0xFFDC2626)
+                            : const Color(0xFF9CA3AF)),
                     const SizedBox(width: 2),
                     Text(elapsed,
                         style: GoogleFonts.montserrat(
                             fontSize: 11,
                             color: isUrgent
-                                ? AppConstants.red
-                                : AppConstants.text3,
+                                ? const Color(0xFFDC2626)
+                                : const Color(0xFF9CA3AF),
                             fontWeight: isUrgent
                                 ? FontWeight.w600
                                 : FontWeight.normal)),
@@ -598,13 +691,13 @@ class _TableCard extends StatelessWidget {
   Color _statusColor(TableStatus s) {
     switch (s) {
       case TableStatus.available:
-        return AppConstants.green;
+        return const Color(0xFF16A34A);
       case TableStatus.occupied:
-        return AppConstants.red;
+        return const Color(0xFFDC2626);
       case TableStatus.reserved:
-        return AppConstants.yellow;
+        return const Color(0xFFD97706);
       case TableStatus.cleaning:
-        return AppConstants.text3;
+        return const Color(0xFF9CA3AF);
     }
   }
 
@@ -627,10 +720,10 @@ class _StatusBadge extends StatelessWidget {
     final color = _color(status);
     return Container(
       padding:
-          const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(
@@ -646,13 +739,13 @@ class _StatusBadge extends StatelessWidget {
   Color _color(TableStatus s) {
     switch (s) {
       case TableStatus.available:
-        return AppConstants.green;
+        return const Color(0xFF16A34A);
       case TableStatus.occupied:
-        return AppConstants.red;
+        return const Color(0xFFDC2626);
       case TableStatus.reserved:
-        return AppConstants.yellow;
+        return const Color(0xFFD97706);
       case TableStatus.cleaning:
-        return AppConstants.text3;
+        return const Color(0xFF9CA3AF);
     }
   }
 }

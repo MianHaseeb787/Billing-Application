@@ -38,7 +38,7 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'DinO Dine POS',
+        title: 'Dijital Adisyon',
         theme: _buildTheme(),
         home: const _AuthGate(),
       ),
@@ -66,7 +66,7 @@ class App extends StatelessWidget {
         outlineVariant: AppConstants.border,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF111827),
         foregroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -82,7 +82,7 @@ class App extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white70, size: 20),
       ),
       cardTheme: CardThemeData(
-        color: Colors.white,
+        color: AppConstants.surface,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -174,7 +174,7 @@ class App extends StatelessWidget {
         behavior: SnackBarBehavior.floating,
       ),
       bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: AppConstants.surface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -182,7 +182,7 @@ class App extends StatelessWidget {
         ),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: AppConstants.surface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -245,9 +245,9 @@ class _SplashScreen extends StatelessWidget {
             ),
             const SizedBox(height: 28),
             Text(
-              'DinO Dine',
+              'Dijital Adisyon',
               style: GoogleFonts.montserrat(
-                fontSize: 36,
+                fontSize: 32,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
                 letterSpacing: -0.5,

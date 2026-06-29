@@ -73,8 +73,8 @@ class Order {
 
   void calculateTotals() {
     subtotal = items.fold(0, (sum, item) => sum + item.total);
-    tax = subtotal * 0.15; // 15% tax
-    serviceCharge = subtotal * 0.05; // 5% service charge
+    tax = subtotal * 0.15; 
+    serviceCharge = subtotal * 0.05; 
     total = subtotal + tax + serviceCharge - discount;
   }
 

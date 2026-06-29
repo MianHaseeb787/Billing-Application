@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../utils/constants.dart';
 
 class MenuManagementScreen extends StatefulWidget {
   const MenuManagementScreen({super.key});
@@ -23,37 +22,65 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.bg,
+      backgroundColor: const Color(0xFFEDE0FF),
       appBar: AppBar(
-        title: const Text('Menü Yönetimi'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x0F000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        title: Text(
+          'Menü Yönetimi',
+          style: GoogleFonts.montserrat(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF111827),
+          ),
+        ),
         actions: [
           SizedBox(
             width: 220,
             child: TextField(
               onChanged: (v) => setState(() => _search = v.toLowerCase()),
               style: GoogleFonts.montserrat(
-                  fontSize: 13, color: AppConstants.text1),
+                  fontSize: 13, color: const Color(0xFF111827)),
               decoration: InputDecoration(
                 hintText: 'Ürün ara…',
                 hintStyle: GoogleFonts.montserrat(
-                    fontSize: 13, color: AppConstants.text3),
+                    fontSize: 13, color: const Color(0xFF9CA3AF)),
                 prefixIcon: const Icon(Icons.search,
-                    size: 16, color: AppConstants.text3),
+                    size: 16, color: Color(0xFF9CA3AF)),
                 isDense: true,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 8),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
                   borderSide:
-                      const BorderSide(color: AppConstants.border),
+                      const BorderSide(color: Color(0xFFE5E7EB)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
                   borderSide:
-                      const BorderSide(color: AppConstants.border),
+                      const BorderSide(color: Color(0xFFE5E7EB)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                      color: Color(0xFF111827), width: 1.5),
                 ),
                 filled: true,
-                fillColor: AppConstants.surface2,
+                fillColor: const Color(0xFFF3F4F6),
               ),
             ),
           ),
@@ -61,12 +88,12 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
           TextButton.icon(
             onPressed: _showAddDialog,
             icon: const Icon(Icons.add,
-                size: 16, color: AppConstants.amber),
+                size: 16, color: Color(0xFF111827)),
             label: Text('Ürün Ekle',
                 style: GoogleFonts.montserrat(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: AppConstants.amber)),
+                    color: const Color(0xFF111827))),
           ),
           const SizedBox(width: 8),
         ],
@@ -80,13 +107,11 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
     );
   }
 
-  // ── Category sidebar ─────────────────────────────────────────────────────
-
   Widget _buildCategoryPanel() {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(right: BorderSide(color: AppConstants.border)),
+        border: Border(right: BorderSide(color: Color(0xFFE5E7EB))),
       ),
       child: StreamBuilder<QuerySnapshot>(
         stream: _db.collection('menuItems').snapshots(),
@@ -114,10 +139,10 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text('KATEGORİLER',
                     style: GoogleFonts.montserrat(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.5,
-                        color: AppConstants.text3)),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2,
+                        color: const Color(0xFF9CA3AF))),
               ),
               Expanded(
                 child: ListView.builder(
@@ -146,12 +171,12 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
             const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
         decoration: BoxDecoration(
           color: active
-              ? AppConstants.amber.withValues(alpha: 0.08)
+              ? const Color(0xFF111827).withValues(alpha: 0.06)
               : Colors.transparent,
           border: Border(
             left: BorderSide(
               color:
-                  active ? AppConstants.amber : Colors.transparent,
+                  active ? const Color(0xFF111827) : Colors.transparent,
               width: 3,
             ),
           ),
@@ -166,8 +191,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                   fontWeight:
                       active ? FontWeight.w600 : FontWeight.normal,
                   color: active
-                      ? AppConstants.amber
-                      : AppConstants.text2,
+                      ? const Color(0xFF111827)
+                      : const Color(0xFF6B7280),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -179,8 +204,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: active
-                      ? AppConstants.amber.withValues(alpha: 0.15)
-                      : AppConstants.surface2,
+                      ? const Color(0xFF111827).withValues(alpha: 0.08)
+                      : const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -189,8 +214,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     color: active
-                        ? AppConstants.amber
-                        : AppConstants.text3,
+                        ? const Color(0xFF111827)
+                        : const Color(0xFF9CA3AF),
                   ),
                 ),
               ),
@@ -200,11 +225,7 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
     );
   }
 
-  // ── Item list ────────────────────────────────────────────────────────────
-
   Widget _buildItemList() {
-    // No .orderBy() here — combining where+orderBy requires a composite
-    // Firestore index. Sort client-side instead.
     Query query = _db.collection('menuItems');
     if (_selectedCategory != 'All') {
       query = query.where('category', isEqualTo: _selectedCategory);
@@ -217,17 +238,16 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
           return Center(
             child: Text('Error loading items',
                 style: GoogleFonts.montserrat(
-                    fontSize: 14, color: AppConstants.red)),
+                    fontSize: 14, color: const Color(0xFFDC2626))),
           );
         }
         if (!snap.hasData) {
           return const Center(
               child: CircularProgressIndicator(
-                  color: AppConstants.amber));
+                  color: Color(0xFF111827)));
         }
 
         var docs = snap.data!.docs;
-        // Client-side sort by name
         docs.sort((a, b) {
           final na = ((a.data() as Map<String, dynamic>)['name']
                       as String? ??
@@ -256,16 +276,24 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.restaurant_menu_outlined,
-                    size: 52, color: AppConstants.text3),
+                    size: 52, color: Color(0xFF9CA3AF)),
                 const SizedBox(height: 12),
                 Text('$_selectedCategory kategorisinde ürün yok',
                     style: GoogleFonts.montserrat(
-                        fontSize: 14, color: AppConstants.text2)),
+                        fontSize: 14, color: const Color(0xFF6B7280))),
                 const SizedBox(height: 14),
                 ElevatedButton.icon(
                   onPressed: _showAddDialog,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF111827),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
                   icon: const Icon(Icons.add, size: 16),
-                  label: const Text('İlk Ürünü Ekle'),
+                  label: Text('İlk Ürünü Ekle',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
@@ -277,26 +305,25 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+              borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: AppConstants.purple.withValues(alpha: 0.10),
-                  blurRadius: 14,
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 16,
                   offset: const Offset(0, 4),
                 ),
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+              borderRadius: BorderRadius.circular(14),
               child: Column(
                 children: [
-                  // Table header
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-                    decoration: BoxDecoration(
-                      color: AppConstants.purple.withValues(alpha: 0.06),
-                      border: const Border(
-                          bottom: BorderSide(color: AppConstants.border)),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF3F4F6),
+                      border: Border(
+                          bottom: BorderSide(color: Color(0xFFE5E7EB))),
                     ),
                     child: Row(
                       children: [
@@ -307,30 +334,30 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                             padding: const EdgeInsets.only(left: 17),
                             child: Text('ÜRÜN',
                                 style: GoogleFonts.montserrat(
-                                    fontSize: 10,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.w700,
-                                    letterSpacing: 1.2,
-                                    color: AppConstants.purple)),
+                                    letterSpacing: 2,
+                                    color: const Color(0xFF9CA3AF))),
                           ),
                         ),
                         SizedBox(
                           width: 110,
                           child: Text('KATEGORİ',
                               style: GoogleFonts.montserrat(
-                                  fontSize: 10,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  letterSpacing: 1.2,
-                                  color: AppConstants.purple)),
+                                  letterSpacing: 2,
+                                  color: const Color(0xFF9CA3AF))),
                         ),
                         SizedBox(
                           width: 88,
                           child: Text('FİYAT',
                               textAlign: TextAlign.right,
                               style: GoogleFonts.montserrat(
-                                  fontSize: 10,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  letterSpacing: 1.2,
-                                  color: AppConstants.purple)),
+                                  letterSpacing: 2,
+                                  color: const Color(0xFF9CA3AF))),
                         ),
                         const SizedBox(width: 16),
                         SizedBox(
@@ -338,10 +365,10 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                           child: Text('DURUM',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.montserrat(
-                                  fontSize: 10,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  letterSpacing: 1.2,
-                                  color: AppConstants.purple)),
+                                  letterSpacing: 2,
+                                  color: const Color(0xFF9CA3AF))),
                         ),
                         const SizedBox(width: 64),
                       ],
@@ -352,7 +379,7 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                       padding: EdgeInsets.zero,
                       itemCount: docs.length,
                       separatorBuilder: (_, __) => const Divider(
-                          height: 1, color: AppConstants.border),
+                          height: 1, color: Color(0xFFE5E7EB)),
                       itemBuilder: (_, i) {
                         final doc = docs[i];
                         final data = doc.data() as Map<String, dynamic>;
@@ -376,8 +403,6 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
     );
   }
 
-  // ── Dialogs ──────────────────────────────────────────────────────────────
-
   void _showAddDialog() => _showItemDialog();
   void _showEditDialog(String id, Map<String, dynamic> data) =>
       _showItemDialog(docId: id, existing: data);
@@ -398,15 +423,46 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
     bool saving = false;
     final formKey = GlobalKey<FormState>();
 
+    final inputDecoration = InputDecoration(
+      filled: true,
+      fillColor: const Color(0xFFF3F4F6),
+      labelStyle: GoogleFonts.montserrat(
+          color: const Color(0xFF9CA3AF), fontSize: 14),
+      hintStyle: GoogleFonts.montserrat(
+          color: const Color(0xFF9CA3AF), fontSize: 14),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:
+            const BorderSide(color: Color(0xFF111827), width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:
+            const BorderSide(color: Color(0xFFDC2626)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:
+            const BorderSide(color: Color(0xFFDC2626), width: 1.5),
+      ),
+    );
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14)),
           title: Text(isEdit ? 'Ürün Düzenle' : 'Menü Ürünü Ekle',
               style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w600,
-                  color: AppConstants.text1)),
+                  color: const Color(0xFF111827))),
           content: SizedBox(
             width: 400,
             child: Form(
@@ -418,8 +474,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     controller: nameCtrl,
                     autofocus: true,
                     style: GoogleFonts.montserrat(
-                        fontSize: 14, color: AppConstants.text1),
-                    decoration: const InputDecoration(
+                        fontSize: 14, color: const Color(0xFF111827)),
+                    decoration: inputDecoration.copyWith(
                         labelText: 'Ürün Adı'),
                     validator: (v) => v == null || v.trim().isEmpty
                         ? 'Zorunlu'
@@ -430,17 +486,17 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     initialValue: _defaultCategories.contains(category)
                         ? category
                         : null,
-                    decoration: const InputDecoration(
+                    decoration: inputDecoration.copyWith(
                         labelText: 'Kategori'),
-                    dropdownColor: AppConstants.surface2,
+                    dropdownColor: Colors.white,
                     style: GoogleFonts.montserrat(
-                        fontSize: 14, color: AppConstants.text1),
+                        fontSize: 14, color: const Color(0xFF111827)),
                     items: _defaultCategories
                         .map((c) => DropdownMenuItem(
                             value: c,
                             child: Text(c,
                                 style: GoogleFonts.montserrat(
-                                    color: AppConstants.text1))))
+                                    color: const Color(0xFF111827)))))
                         .toList(),
                     onChanged: (v) =>
                         setLocal(() => category = v ?? category),
@@ -453,8 +509,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     style: GoogleFonts.montserrat(
-                        fontSize: 14, color: AppConstants.text1),
-                    decoration: const InputDecoration(
+                        fontSize: 14, color: const Color(0xFF111827)),
+                    decoration: inputDecoration.copyWith(
                         labelText: 'Fiyat (TL)',
                         prefixText: 'TL '),
                     validator: (v) {
@@ -472,8 +528,8 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
                     controller: descCtrl,
                     maxLines: 2,
                     style: GoogleFonts.montserrat(
-                        fontSize: 14, color: AppConstants.text1),
-                    decoration: const InputDecoration(
+                        fontSize: 14, color: const Color(0xFF111827)),
+                    decoration: inputDecoration.copyWith(
                       labelText: 'Açıklama (isteğe bağlı)',
                       hintText: 'Kısa açıklama…',
                     ),
@@ -486,7 +542,9 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
             TextButton(
                 onPressed:
                     saving ? null : () => Navigator.pop(ctx),
-                child: const Text('İptal')),
+                child: Text('İptal',
+                    style: GoogleFonts.montserrat(
+                        color: const Color(0xFF6B7280)))),
             ElevatedButton(
               onPressed: saving
                   ? null
@@ -522,14 +580,23 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
 
                       if (ctx.mounted) Navigator.pop(ctx);
                     },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF111827),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
               child: saving
                   ? const SizedBox(
                       width: 16,
                       height: 16,
                       child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.black),
+                          strokeWidth: 2, color: Colors.white),
                     )
-                  : Text(isEdit ? 'Değişiklikleri Kaydet' : 'Ürün Ekle'),
+                  : Text(
+                      isEdit ? 'Değişiklikleri Kaydet' : 'Ürün Ekle',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -541,22 +608,32 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14)),
         title: Text('Ürünü Sil',
             style: GoogleFonts.montserrat(
                 fontWeight: FontWeight.w600,
-                color: AppConstants.text1)),
+                color: const Color(0xFF111827))),
         content: Text('"$name" menüden kaldırılsın mı?',
-            style: GoogleFonts.montserrat(color: AppConstants.text2)),
+            style: GoogleFonts.montserrat(
+                color: const Color(0xFF6B7280))),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('İptal')),
+              child: Text('İptal',
+                  style: GoogleFonts.montserrat(
+                      color: const Color(0xFF6B7280)))),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(
-                backgroundColor: AppConstants.red,
-                foregroundColor: Colors.white),
-            child: const Text('Sil'),
+                backgroundColor: const Color(0xFFDC2626),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10))),
+            child: Text('Sil',
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -566,8 +643,6 @@ class _MenuManagementScreenState extends State<MenuManagementScreen> {
     }
   }
 }
-
-// ── Menu item row ─────────────────────────────────────────────────────────────
 
 class _MenuItemRow extends StatelessWidget {
   final String docId;
@@ -596,12 +671,12 @@ class _MenuItemRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-          // Availability accent bar
           Container(
             width: 3,
-            color: available ? AppConstants.green : AppConstants.red,
+            color: available
+                ? const Color(0xFF16A34A)
+                : const Color(0xFFDC2626),
           ),
-          // Name + description
           Expanded(
             flex: 3,
             child: Padding(
@@ -614,13 +689,13 @@ class _MenuItemRow extends StatelessWidget {
                       style: GoogleFonts.montserrat(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: AppConstants.text1)),
+                          color: const Color(0xFF111827))),
                   if (desc != null && desc.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(desc,
                         style: GoogleFonts.montserrat(
                             fontSize: 11,
-                            color: AppConstants.text3),
+                            color: const Color(0xFF9CA3AF)),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis),
                   ],
@@ -628,7 +703,6 @@ class _MenuItemRow extends StatelessWidget {
               ),
             ),
           ),
-          // Category badge
           SizedBox(
             width: 110,
             child: Padding(
@@ -639,20 +713,20 @@ class _MenuItemRow extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppConstants.surface2,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: AppConstants.border),
+                    color: const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                        color: const Color(0xFFE5E7EB)),
                   ),
                   child: Text(category,
                       style: GoogleFonts.montserrat(
                           fontSize: 11,
-                          color: AppConstants.text2,
+                          color: const Color(0xFF6B7280),
                           fontWeight: FontWeight.w500)),
                 ),
               ),
             ),
           ),
-          // Price
           SizedBox(
             width: 88,
             child: Padding(
@@ -664,12 +738,11 @@ class _MenuItemRow extends StatelessWidget {
                     style: GoogleFonts.montserrat(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: AppConstants.amber)),
+                        color: const Color(0xFF111827))),
               ),
             ),
           ),
           const SizedBox(width: 16),
-          // Status toggle
           SizedBox(
             width: 56,
             child: Center(
@@ -683,13 +756,15 @@ class _MenuItemRow extends StatelessWidget {
                       horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: available
-                        ? AppConstants.green.withValues(alpha: 0.12)
-                        : AppConstants.surface2,
-                    borderRadius: BorderRadius.circular(5),
+                        ? const Color(0xFF16A34A)
+                            .withValues(alpha: 0.12)
+                        : const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: available
-                          ? AppConstants.green.withValues(alpha: 0.4)
-                          : AppConstants.border,
+                          ? const Color(0xFF16A34A)
+                              .withValues(alpha: 0.4)
+                          : const Color(0xFFE5E7EB),
                     ),
                   ),
                   child: Text(
@@ -698,14 +773,13 @@ class _MenuItemRow extends StatelessWidget {
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         color: available
-                            ? AppConstants.green
-                            : AppConstants.text3),
+                            ? const Color(0xFF16A34A)
+                            : const Color(0xFF9CA3AF)),
                   ),
                 ),
               ),
             ),
           ),
-          // Edit / Delete
           Padding(
             padding: const EdgeInsets.symmetric(
                 horizontal: 16, vertical: 14),
@@ -714,13 +788,13 @@ class _MenuItemRow extends StatelessWidget {
                 GestureDetector(
                   onTap: onEdit,
                   child: const Icon(Icons.edit_outlined,
-                      size: 16, color: AppConstants.text2),
+                      size: 16, color: Color(0xFF6B7280)),
                 ),
                 const SizedBox(width: 14),
                 GestureDetector(
                   onTap: onDelete,
                   child: const Icon(Icons.delete_outline,
-                      size: 16, color: AppConstants.red),
+                      size: 16, color: Color(0xFFDC2626)),
                 ),
               ],
             ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -179,110 +178,151 @@ class _TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 72,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        border: Border(bottom: BorderSide(color: AppConstants.border)),
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Text(
-            'DinO Dine',
-            style: GoogleFonts.montserrat(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-              letterSpacing: -0.5,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.diagonal3Values(-1.0, 1.0, 1.0),
-            child: SvgPicture.asset(
-              'assets/images/dino_logo.svg',
-              height: 40,
-              colorFilter:
-                  const ColorFilter.mode(Color(0xFF3889BC), BlendMode.srcIn),
-            ),
-          ),
-          const SizedBox(width: 10),
-          SvgPicture.asset(
-            'assets/images/trex-green.svg',
+          
+          Container(
+            width: 40,
             height: 40,
+            decoration: BoxDecoration(
+              color: const Color(0xFF111827),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.restaurant_menu,
+                size: 20, color: Colors.white),
           ),
-          const Spacer(),
+          const SizedBox(width: 14),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _hhmm(now),
+                'Dijital Adisyon',
                 style: GoogleFonts.montserrat(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  fontFeatures: const [FontFeature.tabularFigures()],
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: const Color(0xFF111827),
+                  letterSpacing: -0.3,
                 ),
               ),
               Text(
-                _date(now),
+                'SATIŞ NOKTASI',
                 style: GoogleFonts.montserrat(
-                    fontSize: 10, color: AppConstants.text3),
+                  fontSize: 9,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF9CA3AF),
+                  letterSpacing: 2,
+                ),
               ),
             ],
           ),
-          const SizedBox(width: 20),
+          const Spacer(),
+          
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF3F4F6),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  _hhmm(now),
+                  style: GoogleFonts.montserrat(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF111827),
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+                Text(
+                  _date(now),
+                  style: GoogleFonts.montserrat(
+                      fontSize: 10,
+                      color: const Color(0xFF6B7280),
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          
           if (auth.user != null) ...[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: AppConstants.surface2,
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: AppConstants.border),
+                color: const Color(0xFFF3F4F6),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CircleAvatar(
-                    radius: 13,
-                    backgroundColor: AppConstants.amber.withValues(alpha: 0.2),
+                    radius: 14,
+                    backgroundColor: const Color(0xFF111827),
                     child: Text(
                       auth.user!.name[0].toUpperCase(),
                       style: GoogleFonts.montserrat(
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
-                          color: AppConstants.amber),
+                          color: Colors.white),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(auth.user!.name,
                           style: GoogleFonts.montserrat(
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: Colors.white)),
+                              color: const Color(0xFF111827))),
                       Text(auth.user!.role.name.toUpperCase(),
                           style: GoogleFonts.montserrat(
                               fontSize: 9,
                               fontWeight: FontWeight.w600,
-                              color: AppConstants.text3,
+                              color: const Color(0xFF6B7280),
                               letterSpacing: 1)),
                     ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 10),
           ],
-          IconButton(
-            icon: const Icon(Icons.logout_outlined,
-                size: 20, color: AppConstants.text2),
-            tooltip: 'Çıkış yap',
+          
+          TextButton.icon(
             onPressed: () => _confirmLogout(context),
+            icon: const Icon(Icons.logout_outlined,
+                size: 16, color: Color(0xFF6B7280)),
+            label: Text(
+              'Çıkış',
+              style: GoogleFonts.montserrat(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF6B7280)),
+            ),
+            style: TextButton.styleFrom(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+            ),
           ),
         ],
       ),
@@ -456,7 +496,7 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.cardRadius),
         boxShadow: [
           BoxShadow(
-            color: AppConstants.purple.withValues(alpha: 0.10),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -468,10 +508,10 @@ class _StatCard extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.12),
+              color: Colors.black.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, size: 20, color: color),
+            child: Icon(icon, size: 20, color: Colors.black87),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -530,8 +570,8 @@ class _NavCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppConstants.cardRadius),
             boxShadow: [
               BoxShadow(
-                color: AppConstants.purple.withValues(alpha: 0.10),
-                blurRadius: 12,
+                color: Colors.black.withValues(alpha: 0.12),
+                blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -539,13 +579,13 @@ class _NavCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 56,
+                height: 56,
                 decoration: BoxDecoration(
                   color: def.color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(def.icon, size: 22, color: def.color),
+                child: Icon(def.icon, size: 30, color: def.color),
               ),
               const SizedBox(width: 14),
               Column(

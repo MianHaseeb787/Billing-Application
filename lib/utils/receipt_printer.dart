@@ -14,10 +14,10 @@ class ReceiptPrinter {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              // Header
+              
               pw.Center(
                 child: pw.Text(
-                  "DinO Dine",
+                  "Dijital Adisyon",
                   style: pw.TextStyle(
                     fontSize: 24,
                     fontWeight: pw.FontWeight.bold,
@@ -33,7 +33,6 @@ class ReceiptPrinter {
               pw.SizedBox(height: 10),
               pw.Divider(),
 
-              // Order Info
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
@@ -45,7 +44,6 @@ class ReceiptPrinter {
               pw.Text("Date: ${_formatDate(order.createdAt)}"),
               pw.Divider(),
 
-              // Items
               pw.SizedBox(height: 5),
               pw.Text(
                 "ITEMS",
@@ -68,7 +66,6 @@ class ReceiptPrinter {
               }),
               pw.Divider(),
 
-              // Totals
               pw.SizedBox(height: 5),
               _buildTotalRow(context, "Subtotal", order.subtotal),
               _buildTotalRow(context, "Tax (15%)", order.tax),
@@ -78,7 +75,6 @@ class ReceiptPrinter {
               pw.Divider(),
               _buildTotalRow(context, "TOTAL", order.total, isBold: true),
 
-              // Payment Method
               if (order.paymentMethod != null) ...[
                 pw.SizedBox(height: 10),
                 pw.Text(
@@ -88,7 +84,6 @@ class ReceiptPrinter {
 
               pw.SizedBox(height: 20),
 
-              // Footer
               pw.Center(
                 child: pw.Text(
                   "Thank You!",
@@ -107,7 +102,7 @@ class ReceiptPrinter {
               pw.SizedBox(height: 10),
               pw.Center(
                 child: pw.Text(
-                  "Powered by DinO Dine POS",
+                  "Dijital Adisyon POS",
                   style: pw.TextStyle(fontSize: 8, color: PdfColors.grey),
                 ),
               ),
@@ -155,7 +150,6 @@ class ReceiptPrinter {
     return "${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
   }
 
-  // Print kitchen order ticket
   static Future<void> printKitchenTicket(Order order) async {
     final pdf = pw.Document();
 
@@ -166,7 +160,7 @@ class ReceiptPrinter {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              // Kitchen Header
+              
               pw.Center(
                 child: pw.Container(
                   padding: const pw.EdgeInsets.all(8),
@@ -185,7 +179,6 @@ class ReceiptPrinter {
               ),
               pw.SizedBox(height: 10),
 
-              // Order Details
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
@@ -206,7 +199,6 @@ class ReceiptPrinter {
               pw.Text("Time: ${_formatDate(DateTime.now())}"),
               pw.Divider(thickness: 2),
 
-              // Items
               pw.SizedBox(height: 10),
               ...order.items.map((item) {
                 return pw.Container(
@@ -238,7 +230,6 @@ class ReceiptPrinter {
               pw.SizedBox(height: 10),
               pw.Divider(thickness: 2),
 
-              // Special instructions
               if (order.items.any(
                 (item) =>
                     item.specialInstructions != null &&

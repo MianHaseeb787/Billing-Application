@@ -5,7 +5,7 @@ import '../models/user_model.dart';
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
   AppUser? _user;
-  bool _isLoading = true; // Start as true for initial auth check
+  bool _isLoading = true; 
   String? _error;
   bool _isInitialized = false;
 
@@ -18,7 +18,6 @@ class AuthProvider extends ChangeNotifier {
     _initAuth();
   }
 
-  // Initialize auth state listener
   void _initAuth() {
     _authService.authStateChanges.listen((firebaseUser) async {
       if (firebaseUser != null) {
@@ -32,7 +31,6 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
-  // Sign in with email and password
   Future<bool> signIn(String email, String password) async {
     _isLoading = true;
     _error = null;
@@ -68,7 +66,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // Sign up new user
   Future<bool> signUp(
     String email,
     String password,
@@ -92,7 +89,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // Sign out
   Future<void> signOut() async {
     _isLoading = true;
     notifyListeners();
@@ -103,17 +99,14 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Check if user has specific permission
   bool hasPermission(String permission) {
     return _user?.hasPermission(permission) ?? false;
   }
 
-  // Get all users (admin only)
   Stream<List<AppUser>> getAllUsers() {
     return _authService.getAllUsers();
   }
 
-  // Update user data
   Future<void> updateUserData(String uid, Map<String, dynamic> data) async {
     await _authService.updateUserData(uid, data);
     if (_user?.uid == uid) {
@@ -122,7 +115,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // Clear error message
   void clearError() {
     _error = null;
     notifyListeners();

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
 
 class InventoryItem {
   final String id;
@@ -51,7 +50,6 @@ class InventoryItem {
 class InventoryService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Get all inventory items
   Stream<List<InventoryItem>> getInventoryItems() {
     return _firestore
         .collection('inventory')
@@ -64,7 +62,6 @@ class InventoryService {
         );
   }
 
-  // Get low stock items
   Stream<List<InventoryItem>> getLowStockItems() {
     return _firestore
         .collection('inventory')
@@ -77,12 +74,10 @@ class InventoryService {
         );
   }
 
-  // Add new inventory item
   Future<void> addInventoryItem(InventoryItem item) async {
     await _firestore.collection('inventory').add(item.toFirestore());
   }
 
-  // Update stock quantity
   Future<void> updateStock(String id, int newStock) async {
     await _firestore.collection('inventory').doc(id).update({
       'stock': newStock,
@@ -90,7 +85,6 @@ class InventoryService {
     });
   }
 
-  // Increase stock
   Future<void> increaseStock(String id, int amount) async {
     final doc = await _firestore.collection('inventory').doc(id).get();
     if (doc.exists) {
@@ -99,7 +93,6 @@ class InventoryService {
     }
   }
 
-  // Decrease stock (when items are sold)
   Future<void> decreaseStock(String id, int amount) async {
     final doc = await _firestore.collection('inventory').doc(id).get();
     if (doc.exists) {
@@ -109,12 +102,10 @@ class InventoryService {
     }
   }
 
-  // Delete inventory item
   Future<void> deleteInventoryItem(String id) async {
     await _firestore.collection('inventory').doc(id).delete();
   }
 
-  // Update minimum stock level
   Future<void> updateMinimumStock(String id, int minimumStock) async {
     await _firestore.collection('inventory').doc(id).update({
       'minimumStock': minimumStock,
@@ -122,7 +113,6 @@ class InventoryService {
     });
   }
 
-  // Get inventory statistics
   Future<Map<String, dynamic>> getInventoryStats() async {
     final snapshot = await _firestore.collection('inventory').get();
 
@@ -154,7 +144,6 @@ class InventoryService {
     };
   }
 
-  // Bulk update inventory after order completion
   Future<void> processOrderInventory(Map<String, int> itemUsage) async {
     final batch = _firestore.batch();
 

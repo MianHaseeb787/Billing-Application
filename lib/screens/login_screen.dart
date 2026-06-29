@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -12,15 +11,32 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscure = true;
   bool _loading = false;
 
+  late final AnimationController _animCtrl;
+  late final Animation<double> _rockAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _animCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    )..repeat(reverse: true);
+    _rockAnim = Tween<double>(begin: -0.022, end: 0.022).animate(
+      CurvedAnimation(parent: _animCtrl, curve: Curves.easeInOut),
+    );
+  }
+
   @override
   void dispose() {
+    _animCtrl.dispose();
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
     super.dispose();
@@ -53,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 150, 22, 209),
+      backgroundColor: const Color(0xFFEDE0FF),
       body: Row(
         children: [
           Expanded(
@@ -62,15 +78,17 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    'assets/images/t-rex.svg',
-                    height: 140,
-                    colorFilter: const ColorFilter.mode(
-                        AppConstants.amber, BlendMode.srcIn),
+                  RotationTransition(
+                    turns: _rockAnim,
+                    child: Image.asset(
+                      'assets/images/pizza.png',
+                      width: 180,
+                      height: 180,
+                    ),
                   ),
                   const SizedBox(height: 32),
                   Text(
-                    'DinO Dine',
+                    'Dijital Adisyon',
                     style: GoogleFonts.montserrat(
                       fontSize: 42,
                       fontWeight: FontWeight.w800,
@@ -105,10 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 380),
-                child: Padding(
-                  padding: const EdgeInsets.all(32),
-                  child: Form(
+                    constraints: const BoxConstraints(maxWidth: 380),
+                    child: Padding(
+                      padding: const EdgeInsets.all(32),
+                      child: Form(
                     key: _formKey,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -119,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: GoogleFonts.montserrat(
                             fontSize: 28,
                             fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            color: const Color(0xFF111827),
                             letterSpacing: -0.5,
                           ),
                         ),
@@ -128,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Hesabınıza giriş yapın',
                           style: GoogleFonts.montserrat(
                             fontSize: 14,
-                            color: Colors.white70,
+                            color: const Color(0xFF6B7280),
                           ),
                         ),
                         const SizedBox(height: 36),
@@ -139,12 +157,30 @@ class _LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.emailAddress,
                           autofillHints: const [AutofillHints.email],
                           style: _inputStyle,
-                          decoration: const InputDecoration(
-                              hintText: 'siz@restoran.com'),
+                          decoration: InputDecoration(
+                            hintText: 'siz@restoran.com',
+                            fillColor: const Color(0xFFF3F4F6),
+                            filled: true,
+                            hintStyle: GoogleFonts.montserrat(
+                                color: const Color(0xFF9CA3AF), fontSize: 14),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.borderRadius),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFFE5E7EB)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.borderRadius),
+                              borderSide: const BorderSide(
+                                  color: Color(0xFF111827), width: 1.5),
+                            ),
+                          ),
                           validator: (v) {
                             if (v == null || v.trim().isEmpty) return 'Zorunlu';
-                            if (!v.contains('@'))
+                            if (!v.contains('@')) {
                               return 'Geçerli bir e-posta girin';
+                            }
                             return null;
                           },
                         ),
@@ -158,13 +194,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: _inputStyle,
                           decoration: InputDecoration(
                             hintText: '••••••••',
+                            fillColor: const Color(0xFFF3F4F6),
+                            filled: true,
+                            hintStyle: GoogleFonts.montserrat(
+                                color: const Color(0xFF9CA3AF), fontSize: 14),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.borderRadius),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFFE5E7EB)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.borderRadius),
+                              borderSide: const BorderSide(
+                                  color: Color(0xFF111827), width: 1.5),
+                            ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscure
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
                                 size: 18,
-                                color: Colors.white60,
+                                color: const Color(0xFF9CA3AF),
                               ),
                               onPressed: () =>
                                   setState(() => _obscure = !_obscure),
@@ -180,12 +232,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 52,
                           child: ElevatedButton(
                             onPressed: _loading ? null : _submit,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF111827),
+                              foregroundColor: Colors.white,
+                            ),
                             child: _loading
                                 ? const SizedBox(
                                     width: 20,
                                     height: 20,
                                     child: CircularProgressIndicator(
-                                        strokeWidth: 2, color: Colors.black),
+                                        strokeWidth: 2, color: Colors.white),
                                   )
                                 : const Text('Giriş Yap'),
                           ),
@@ -203,16 +259,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               'Şifremi unuttum?',
                               style: GoogleFonts.montserrat(
-                                  fontSize: 13, color: Colors.white70),
+                                  fontSize: 13,
+                                  color: const Color(0xFF6B7280)),
                             ),
                           ),
                         ),
                         const SizedBox(height: 40),
                         Center(
                           child: Text(
-                            'DinO Dine POS  ·  v1.0',
+                            'Dijital Adisyon POS  ·  v1.0',
                             style: GoogleFonts.montserrat(
-                                fontSize: 11, color: Colors.white38),
+                                fontSize: 11,
+                                color: const Color(0xFF9CA3AF)),
                           ),
                         ),
                       ],
@@ -236,10 +294,10 @@ class _LoginScreenState extends State<LoginScreen> {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: AppConstants.amber.withValues(alpha: 0.12),
+              color: Colors.white.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, size: 16, color: AppConstants.amber),
+            child: Icon(icon, size: 16, color: Colors.white),
           ),
           const SizedBox(width: 14),
           Text(
@@ -259,9 +317,9 @@ class _LoginScreenState extends State<LoginScreen> {
         style: GoogleFonts.montserrat(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: Colors.white70),
+            color: const Color(0xFF374151)),
       );
 
   TextStyle get _inputStyle =>
-      GoogleFonts.montserrat(fontSize: 14, color: Colors.black);
+      GoogleFonts.montserrat(fontSize: 14, color: const Color(0xFF111827));
 }

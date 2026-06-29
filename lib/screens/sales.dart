@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../utils/constants.dart';
 
 enum _Period { today, week, month, all }
 
@@ -32,8 +31,33 @@ class _SalesScreenState extends State<SalesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.bg,
-      appBar: AppBar(title: const Text('Satış Paneli')),
+      backgroundColor: const Color(0xFFEDE0FF),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x0F000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        title: Text(
+          'Satış Paneli',
+          style: GoogleFonts.montserrat(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF111827),
+          ),
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('salesLogs')
@@ -43,7 +67,7 @@ class _SalesScreenState extends State<SalesScreen> {
           if (!snap.hasData) {
             return const Center(
                 child: CircularProgressIndicator(
-                    color: AppConstants.amber));
+                    color: Color(0xFF111827)));
           }
 
           final cutoff = _from;
@@ -101,14 +125,14 @@ class _SalesScreenState extends State<SalesScreen> {
                             value:
                                 'TL ${totalRevenue.toStringAsFixed(2)}',
                             icon: Icons.attach_money_outlined,
-                            color: AppConstants.green,
+                            color: const Color(0xFF16A34A),
                           ),
                           const SizedBox(width: 14),
                           _SummaryCard(
                             label: 'Siparişler',
                             value: '${docs.length}',
                             icon: Icons.receipt_long_outlined,
-                            color: AppConstants.blue,
+                            color: const Color(0xFF2563EB),
                           ),
                           const SizedBox(width: 14),
                           _SummaryCard(
@@ -117,7 +141,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                 ? 'TL 0.00'
                                 : 'TL ${(totalRevenue / docs.length).toStringAsFixed(2)}',
                             icon: Icons.bar_chart_outlined,
-                            color: AppConstants.purple,
+                            color: const Color(0xFF111827),
                           ),
                         ],
                       ),
@@ -170,16 +194,16 @@ class _PeriodBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(bottom: BorderSide(color: AppConstants.border)),
+        border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
       ),
       child: Row(
         children: [
           const Icon(Icons.calendar_today_outlined,
-              size: 14, color: AppConstants.text3),
+              size: 14, color: Color(0xFF9CA3AF)),
           const SizedBox(width: 8),
           Text('Dönem:',
               style: GoogleFonts.montserrat(
-                  fontSize: 12, color: AppConstants.text3)),
+                  fontSize: 12, color: const Color(0xFF9CA3AF))),
           const SizedBox(width: 12),
           ..._Period.values.map((p) {
             final active = period == p;
@@ -192,14 +216,14 @@ class _PeriodBar extends StatelessWidget {
                       horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: active
-                        ? AppConstants.amber
-                            .withValues(alpha: 0.15)
+                        ? const Color(0xFF111827)
+                            .withValues(alpha: 0.08)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: active
-                          ? AppConstants.amber
-                          : AppConstants.border,
+                          ? const Color(0xFF111827)
+                          : const Color(0xFFE5E7EB),
                     ),
                   ),
                   child: Text(labels[p]!,
@@ -207,8 +231,8 @@ class _PeriodBar extends StatelessWidget {
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: active
-                              ? AppConstants.amber
-                              : AppConstants.text2)),
+                              ? const Color(0xFF111827)
+                              : const Color(0xFF6B7280))),
                 ),
               ),
             );
@@ -236,10 +260,15 @@ class _SummaryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: AppConstants.surface,
-          borderRadius:
-              BorderRadius.circular(AppConstants.cardRadius),
-          border: Border.all(color: AppConstants.border),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -247,7 +276,7 @@ class _SummaryCard extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.12),
+                color: color.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, size: 20, color: color),
@@ -259,13 +288,13 @@ class _SummaryCard extends StatelessWidget {
                 Text(label,
                     style: GoogleFonts.montserrat(
                         fontSize: 11,
-                        color: AppConstants.text2)),
+                        color: const Color(0xFF6B7280))),
                 const SizedBox(height: 3),
                 Text(value,
                     style: GoogleFonts.montserrat(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: AppConstants.text1)),
+                        color: const Color(0xFF111827))),
               ],
             ),
           ],
@@ -287,11 +316,11 @@ class _PaymentBreakdown extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: AppConstants.purple.withValues(alpha: 0.10),
-            blurRadius: 12,
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
@@ -303,12 +332,12 @@ class _PaymentBreakdown extends StatelessWidget {
               style: GoogleFonts.montserrat(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: AppConstants.text1)),
+                  color: const Color(0xFF111827))),
           const SizedBox(height: 16),
           if (byMethod.isEmpty)
             Text('Henüz veri yok',
                 style: GoogleFonts.montserrat(
-                    fontSize: 13, color: AppConstants.text3))
+                    fontSize: 13, color: const Color(0xFF9CA3AF)))
           else
             ...byMethod.entries.map((e) {
               final pct = total > 0 ? (e.value / total) : 0.0;
@@ -325,12 +354,12 @@ class _PaymentBreakdown extends StatelessWidget {
                             style: GoogleFonts.montserrat(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
-                                color: AppConstants.text2)),
+                                color: const Color(0xFF6B7280))),
                         Text(
                           'TL ${e.value.toStringAsFixed(2)} · ${(pct * 100).toStringAsFixed(0)}%',
                           style: GoogleFonts.montserrat(
                               fontSize: 11,
-                              color: AppConstants.text3),
+                              color: const Color(0xFF9CA3AF)),
                         ),
                       ],
                     ),
@@ -339,10 +368,10 @@ class _PaymentBreakdown extends StatelessWidget {
                       borderRadius: BorderRadius.circular(3),
                       child: LinearProgressIndicator(
                         value: pct.toDouble(),
-                        backgroundColor: AppConstants.surface2,
+                        backgroundColor: const Color(0xFFF3F4F6),
                         valueColor:
                             const AlwaysStoppedAnimation<Color>(
-                                AppConstants.amber),
+                                Color(0xFF111827)),
                         minHeight: 6,
                       ),
                     ),
@@ -366,11 +395,11 @@ class _TopItems extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: AppConstants.purple.withValues(alpha: 0.10),
-            blurRadius: 12,
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
@@ -382,21 +411,21 @@ class _TopItems extends StatelessWidget {
               style: GoogleFonts.montserrat(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: AppConstants.text1)),
+                  color: const Color(0xFF111827))),
           const SizedBox(height: 16),
           if (items.isEmpty)
             Text('Henüz veri yok',
                 style: GoogleFonts.montserrat(
-                    fontSize: 13, color: AppConstants.text3))
+                    fontSize: 13, color: const Color(0xFF9CA3AF)))
           else
             ...items.asMap().entries.map((e) {
               final rank = e.key + 1;
               final item = e.value;
               final rankColor = rank == 1
-                  ? AppConstants.amber
+                  ? const Color(0xFFD97706)
                   : rank == 2
-                      ? AppConstants.text2
-                      : AppConstants.text3;
+                      ? const Color(0xFF6B7280)
+                      : const Color(0xFF9CA3AF);
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Row(
@@ -414,20 +443,20 @@ class _TopItems extends StatelessWidget {
                       child: Text(item.key,
                           style: GoogleFonts.montserrat(
                               fontSize: 13,
-                              color: AppConstants.text1)),
+                              color: const Color(0xFF111827))),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: AppConstants.surface2,
-                        borderRadius: BorderRadius.circular(5),
+                        color: const Color(0xFFF3F4F6),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text('×${item.value.toInt()}',
                           style: GoogleFonts.montserrat(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: AppConstants.text2)),
+                              color: const Color(0xFF6B7280))),
                     ),
                   ],
                 ),
@@ -448,11 +477,11 @@ class _TransactionLog extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: AppConstants.purple.withValues(alpha: 0.10),
-            blurRadius: 12,
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
@@ -467,9 +496,9 @@ class _TransactionLog extends StatelessWidget {
                 style: GoogleFonts.montserrat(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppConstants.text1)),
+                    color: const Color(0xFF111827))),
           ),
-          const Divider(height: 1, color: AppConstants.border),
+          const Divider(height: 1, color: Color(0xFFE5E7EB)),
           if (docs.isEmpty)
             Padding(
               padding: const EdgeInsets.all(24),
@@ -477,7 +506,7 @@ class _TransactionLog extends StatelessWidget {
                 child: Text('Bu dönemde işlem yok',
                     style: GoogleFonts.montserrat(
                         fontSize: 13,
-                        color: AppConstants.text3)),
+                        color: const Color(0xFF9CA3AF))),
               ),
             )
           else
@@ -486,7 +515,7 @@ class _TransactionLog extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: docs.length,
               separatorBuilder: (_, __) => const Divider(
-                  height: 1, color: AppConstants.border),
+                  height: 1, color: Color(0xFFE5E7EB)),
               itemBuilder: (_, i) {
                 final data =
                     docs[i].data() as Map<String, dynamic>;
@@ -511,13 +540,13 @@ class _TransactionLog extends StatelessWidget {
                     width: 34,
                     height: 34,
                     decoration: BoxDecoration(
-                      color: AppConstants.green
+                      color: const Color(0xFF16A34A)
                           .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
                         Icons.check_circle_outline,
-                        color: AppConstants.green,
+                        color: Color(0xFF16A34A),
                         size: 17),
                   ),
                   title: Text(
@@ -525,13 +554,13 @@ class _TransactionLog extends StatelessWidget {
                     style: GoogleFonts.montserrat(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: AppConstants.text1),
+                        color: const Color(0xFF111827)),
                   ),
                   subtitle: date != null
                       ? Text(_fmtDt(date),
                           style: GoogleFonts.montserrat(
                               fontSize: 11,
-                              color: AppConstants.text3))
+                              color: const Color(0xFF9CA3AF)))
                       : null,
                   trailing: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -541,11 +570,11 @@ class _TransactionLog extends StatelessWidget {
                           style: GoogleFonts.montserrat(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
-                              color: AppConstants.amber)),
+                              color: const Color(0xFF111827))),
                       Text(method,
                           style: GoogleFonts.montserrat(
                               fontSize: 10,
-                              color: AppConstants.text3)),
+                              color: const Color(0xFF9CA3AF))),
                     ],
                   ),
                 );

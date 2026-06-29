@@ -43,20 +43,17 @@ class OrderProvider extends ChangeNotifier {
     }
   }
 
-  /// Marks the order as paid, logs the sale, and optionally applies a discount.
   Future<void> completeOrder(
     String orderId,
     PaymentMethod method, {
     double discount = 0,
   }) async {
-    // Fetch the order directly from Firestore — avoids relying on the local
-    // in-memory list which may be empty if initialize() was never called.
+    
     final doc = await FirebaseFirestore.instance.collection('orders').doc(orderId).get();
     if (!doc.exists) throw Exception('Order $orderId not found');
 
     final order = Order.fromFirestore(doc.data()!, orderId);
 
-    // Apply discount if provided
     if (discount > 0) {
       order.discount = discount;
       order.calculateTotals();

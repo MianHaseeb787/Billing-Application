@@ -21,10 +21,8 @@ class AppUser {
     this.lastLogin,
   });
 
-  // Convert UserRole to string for Firestore
   String get roleString => role.toString().split('.').last;
 
-  // Get permissions based on role
   List<String> get permissions {
     switch (role) {
       case UserRole.admin:

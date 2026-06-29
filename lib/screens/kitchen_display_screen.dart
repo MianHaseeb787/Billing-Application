@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/order.dart';
 import '../services/firestore_service.dart';
-import '../utils/constants.dart';
 
 class KitchenDisplayScreen extends StatefulWidget {
   const KitchenDisplayScreen({super.key});
@@ -36,10 +35,24 @@ class _KitchenDisplayScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.bg,
+      backgroundColor: const Color(0xFFEDE0FF),
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x0F000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF111827)),
         title: Row(
           children: [
             Container(
@@ -47,23 +60,23 @@ class _KitchenDisplayScreenState
               height: 8,
               margin: const EdgeInsets.only(right: 10),
               decoration: const BoxDecoration(
-                  color: AppConstants.green,
+                  color: Color(0xFF16A34A),
                   shape: BoxShape.circle),
             ),
             Text('MUTFAK EKRANI',
                 style: GoogleFonts.montserrat(
-                    fontSize: 14,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: const Color(0xFF111827),
                     letterSpacing: 2)),
           ],
         ),
         actions: [
-          _legend(AppConstants.yellow, 'BEKLEMEDE'),
+          _legend(const Color(0xFFD97706), 'BEKLEMEDE'),
           const SizedBox(width: 16),
-          _legend(AppConstants.blue, 'HAZIRLANIYOR'),
+          _legend(const Color(0xFF2563EB), 'HAZIRLANIYOR'),
           const SizedBox(width: 16),
-          _legend(AppConstants.green, 'HAZIR'),
+          _legend(const Color(0xFF16A34A), 'HAZIR'),
           const SizedBox(width: 16),
         ],
       ),
@@ -73,7 +86,7 @@ class _KitchenDisplayScreenState
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(
                 child: CircularProgressIndicator(
-                    color: AppConstants.amber));
+                    color: Color(0xFF111827)));
           }
 
           final orders = (snap.data ?? [])
@@ -101,17 +114,18 @@ class _KitchenDisplayScreenState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.check_circle_outline,
-                      size: 72, color: AppConstants.green),
+                      size: 72, color: Color(0xFF16A34A)),
                   const SizedBox(height: 16),
                   Text('Tüm Siparişler Tamam',
                       style: GoogleFonts.montserrat(
                           fontSize: 30,
                           fontWeight: FontWeight.w700,
-                          color: AppConstants.text1)),
+                          color: const Color(0xFF111827))),
                   const SizedBox(height: 6),
                   Text('Kuyrukta aktif sipariş yok',
                       style: GoogleFonts.montserrat(
-                          fontSize: 15, color: AppConstants.text2)),
+                          fontSize: 15,
+                          color: const Color(0xFF6B7280))),
                 ],
               ),
             );
@@ -147,7 +161,7 @@ class _KitchenDisplayScreenState
         const SizedBox(width: 5),
         Text(label,
             style: GoogleFonts.montserrat(
-                fontSize: 10, color: Colors.white70)),
+                fontSize: 10, color: const Color(0xFF6B7280))),
       ],
     );
   }
@@ -172,14 +186,14 @@ class _KdsCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+        borderRadius: BorderRadius.circular(14),
         border: isUrgent
-            ? Border.all(color: AppConstants.red, width: 2)
+            ? Border.all(color: const Color(0xFFDC2626), width: 2)
             : null,
         boxShadow: [
           BoxShadow(
-            color: AppConstants.purple.withValues(alpha: 0.12),
-            blurRadius: 12,
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
@@ -191,9 +205,9 @@ class _KdsCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 horizontal: 12, vertical: 9),
             decoration: BoxDecoration(
-              color: statusColor.withValues(alpha: 0.12),
+              color: statusColor.withValues(alpha: 0.10),
               borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(9)),
+                  const BorderRadius.vertical(top: Radius.circular(13)),
             ),
             child: Row(
               children: [
@@ -205,13 +219,13 @@ class _KdsCard extends StatelessWidget {
                           style: GoogleFonts.montserrat(
                               fontSize: 15,
                               fontWeight: FontWeight.w800,
-                              color: AppConstants.text1,
+                              color: const Color(0xFF111827),
                               letterSpacing: 0.5)),
                       Text(
                           '#${order.id.substring(0, 6).toUpperCase()}',
                           style: GoogleFonts.montserrat(
                               fontSize: 10,
-                              color: AppConstants.text3)),
+                              color: const Color(0xFF9CA3AF))),
                     ],
                   ),
                 ),
@@ -220,10 +234,10 @@ class _KdsCard extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: statusColor.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                             color:
                                 statusColor.withValues(alpha: 0.4)),
@@ -241,15 +255,15 @@ class _KdsCard extends StatelessWidget {
                         Icon(Icons.timer_outlined,
                             size: 10,
                             color: isUrgent
-                                ? AppConstants.red
-                                : AppConstants.text3),
+                                ? const Color(0xFFDC2626)
+                                : const Color(0xFF9CA3AF)),
                         const SizedBox(width: 2),
                         Text(_elapsedLabel(elapsed),
                             style: GoogleFonts.montserrat(
                                 fontSize: 10,
                                 color: isUrgent
-                                    ? AppConstants.red
-                                    : AppConstants.text3,
+                                    ? const Color(0xFFDC2626)
+                                    : const Color(0xFF9CA3AF),
                                 fontWeight: isUrgent
                                     ? FontWeight.w700
                                     : FontWeight.normal)),
@@ -276,8 +290,7 @@ class _KdsCard extends StatelessWidget {
                         width: 26,
                         height: 26,
                         decoration: BoxDecoration(
-                          color:
-                              Colors.white.withValues(alpha: 0.07),
+                          color: const Color(0xFFF3F4F6),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         alignment: Alignment.center,
@@ -285,14 +298,14 @@ class _KdsCard extends StatelessWidget {
                             style: GoogleFonts.montserrat(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: AppConstants.text1)),
+                                color: const Color(0xFF111827))),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(item.name,
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
-                                color: AppConstants.text2)),
+                                color: const Color(0xFF6B7280))),
                       ),
                     ],
                   ),
@@ -316,12 +329,12 @@ class _KdsCard extends StatelessWidget {
           onPressed: () => svc.updateOrderStatus(
               order.id, OrderStatus.preparing),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppConstants.blue,
+            backgroundColor: const Color(0xFF2563EB),
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 10),
             elevation: 0,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6)),
+                borderRadius: BorderRadius.circular(10)),
           ),
           child: Text('HAZIRLAMAYA BAŞLA',
               style: GoogleFonts.montserrat(
@@ -334,12 +347,12 @@ class _KdsCard extends StatelessWidget {
           onPressed: () =>
               svc.updateOrderStatus(order.id, OrderStatus.ready),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppConstants.green,
-            foregroundColor: Colors.black,
+            backgroundColor: const Color(0xFF16A34A),
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 10),
             elevation: 0,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6)),
+                borderRadius: BorderRadius.circular(10)),
           ),
           child: Text('HAZIR OLARAK İŞARETLE',
               style: GoogleFonts.montserrat(
@@ -352,12 +365,12 @@ class _KdsCard extends StatelessWidget {
           onPressed: () =>
               svc.updateOrderStatus(order.id, OrderStatus.served),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppConstants.purple,
+            backgroundColor: const Color(0xFF111827),
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 10),
             elevation: 0,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6)),
+                borderRadius: BorderRadius.circular(10)),
           ),
           child: Text('SERVİS EDİLDİ ✓',
               style: GoogleFonts.montserrat(
@@ -373,13 +386,13 @@ class _KdsCard extends StatelessWidget {
   (Color, String) _statusInfo(OrderStatus s) {
     switch (s) {
       case OrderStatus.pending:
-        return (AppConstants.yellow, 'BEKLEMEDE');
+        return (const Color(0xFFD97706), 'BEKLEMEDE');
       case OrderStatus.preparing:
-        return (AppConstants.blue, 'HAZIRLANIYOR');
+        return (const Color(0xFF2563EB), 'HAZIRLANIYOR');
       case OrderStatus.ready:
-        return (AppConstants.green, 'HAZIR');
+        return (const Color(0xFF16A34A), 'HAZIR');
       default:
-        return (AppConstants.text3, s.name.toUpperCase());
+        return (const Color(0xFF9CA3AF), s.name.toUpperCase());
     }
   }
 

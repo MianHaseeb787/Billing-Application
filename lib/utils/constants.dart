@@ -3,26 +3,22 @@ import 'package:flutter/material.dart';
 class AppConstants {
   AppConstants._();
 
-  // ── Background layers ─────────────────────────────────────────────────
-  static const Color bg       = Color.fromARGB(255, 201, 142, 243); // light purple page bg
-  static const Color surface  = Colors.white;                        // card / panel surface
-  static const Color surface2 = Color(0xFFF0E6FF);                  // hover / secondary surface
-  static const Color border   = Color(0xFFDDC8FF);                  // dividers, input borders
+  static const Color bg       = Color(0xFFE3E1DD); 
+  static const Color surface  = Color(0xFFF0EDE7); 
+  static const Color surface2 = Color(0xFFE6E3DD); 
+  static const Color border   = Color(0xFFC9C5BE); 
 
-  // ── Brand / semantic colours ──────────────────────────────────────────
-  static const Color amber  = Color(0xFF9929EA); // primary CTA (purple)
-  static const Color green  = Color(0xFF22C55E); // success / available
-  static const Color red    = Color(0xFFF85149); // danger / occupied
-  static const Color yellow = Color(0xFFD29922); // warning / reserved
-  static const Color blue   = Color(0xFF58A6FF); // info / preparing
-  static const Color purple = Color(0xFF9929EA); // brand purple
+  static const Color amber  = Color(0xFF1F2937); 
+  static const Color green  = Color(0xFF16A34A); 
+  static const Color red    = Color(0xFFDC2626); 
+  static const Color yellow = Color(0xFFD97706); 
+  static const Color blue   = Color(0xFF2563EB); 
+  static const Color purple = Color(0xFF1F2937); 
 
-  // ── Text (dark — for use on white card surfaces) ──────────────────────
-  static const Color text1 = Color(0xFF1A1A1A); // primary
-  static const Color text2 = Color(0xFF555555); // secondary
-  static const Color text3 = Color(0xFF888888); // muted / placeholder
+  static const Color text1 = Color(0xFF111827); 
+  static const Color text2 = Color(0xFF6B7280); 
+  static const Color text3 = Color(0xFF9CA3AF); 
 
-  // ── Legacy aliases ────────────────────────────────────────────────────
   static const Color primaryColor    = amber;
   static const Color secondaryColor  = Colors.black;
   static const Color accentColor     = surface2;
@@ -34,7 +30,6 @@ class AppConstants {
   static const Color textPrimary     = text1;
   static const Color textSecondary   = text2;
 
-  // ── Spacing (8-pt grid) ───────────────────────────────────────────────
   static const double xs = 4.0;
   static const double sm = 8.0;
   static const double md = 16.0;

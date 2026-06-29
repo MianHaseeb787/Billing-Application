@@ -6,7 +6,6 @@ import '../models/table_model.dart';
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Menu Items
   Stream<List<MenuItem>> getMenuItems() {
     return _firestore
         .collection('menuItems')
@@ -30,7 +29,6 @@ class FirestoreService {
     return _firestore.collection('menuItems').doc(id).delete();
   }
 
-  // Tables
   Stream<List<RestaurantTable>> getTables() {
     return _firestore
         .collection('tables')
@@ -50,9 +48,8 @@ class FirestoreService {
     });
   }
 
-  // Orders
   Stream<List<Order>> getActiveOrders() {
-    // whereIn + orderBy needs a composite index; sort client-side instead.
+    
     return _firestore
         .collection('orders')
         .where('status', whereIn: ['pending', 'preparing', 'ready', 'served'])
@@ -89,7 +86,6 @@ class FirestoreService {
     });
   }
 
-  // Sales Logs
   Future<void> logSale(Order order) {
     return _firestore.collection('salesLogs').add({
       ...order.toFirestore(),
@@ -97,7 +93,6 @@ class FirestoreService {
     });
   }
 
-  // Inventory
   Stream<QuerySnapshot> getInventory() {
     return _firestore.collection('inventory').snapshots();
   }

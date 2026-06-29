@@ -7,7 +7,6 @@ import '../models/menu_item.dart' as menu_model;
 import '../models/order.dart';
 import '../providers/cart_provider.dart';
 import '../services/firestore_service.dart';
-import '../utils/constants.dart';
 
 class OrderScreen extends StatelessWidget {
   final RestaurantTable table;
@@ -39,14 +38,30 @@ class _OrderBodyState extends State<_OrderBody> {
     final cart = context.watch<CartProvider>();
 
     return Scaffold(
-      backgroundColor: AppConstants.bg,
+      backgroundColor: const Color(0xFFEDE0FF),
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x0F000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF111827)),
         title: Text(
           'Masa ${widget.table.tableNo}  —  Yeni Sipariş',
           style: GoogleFonts.montserrat(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: AppConstants.text1),
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF111827)),
         ),
         actions: [
           if (cart.items.isNotEmpty) ...[
@@ -56,19 +71,18 @@ class _OrderBodyState extends State<_OrderBody> {
               padding: const EdgeInsets.symmetric(
                   horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color:
-                    AppConstants.amber.withValues(alpha: 0.15),
+                color: const Color(0xFF111827).withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                    color: AppConstants.amber
-                        .withValues(alpha: 0.4)),
+                    color: const Color(0xFF111827)
+                        .withValues(alpha: 0.3)),
               ),
               child: Text(
                 '${cart.itemCount} ürün',
                 style: GoogleFonts.montserrat(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: AppConstants.amber),
+                    color: const Color(0xFF111827)),
               ),
             ),
           ],
@@ -113,7 +127,7 @@ class _CategorySidebar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(right: BorderSide(color: AppConstants.border)),
+        border: Border(right: BorderSide(color: Color(0xFFE5E7EB))),
       ),
       child: StreamBuilder<List<menu_model.MenuItem>>(
         stream: svc.getMenuItems(),
@@ -163,12 +177,12 @@ class _CategoryTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: active
-              ? AppConstants.amber.withValues(alpha: 0.12)
+              ? const Color(0xFF111827).withValues(alpha: 0.06)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: active
-                ? AppConstants.amber.withValues(alpha: 0.4)
+                ? const Color(0xFF111827).withValues(alpha: 0.3)
                 : Colors.transparent,
           ),
         ),
@@ -179,16 +193,16 @@ class _CategoryTile extends StatelessWidget {
               height: 52,
               decoration: BoxDecoration(
                 color: active
-                    ? AppConstants.amber.withValues(alpha: 0.15)
-                    : AppConstants.surface2,
+                    ? const Color(0xFF111827).withValues(alpha: 0.08)
+                    : const Color(0xFFF3F4F6),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 Icons.restaurant_outlined,
                 size: 22,
                 color: active
-                    ? AppConstants.amber
-                    : AppConstants.text3,
+                    ? const Color(0xFF111827)
+                    : const Color(0xFF9CA3AF),
               ),
             ),
             const SizedBox(height: 6),
@@ -200,8 +214,8 @@ class _CategoryTile extends StatelessWidget {
                 fontWeight:
                     active ? FontWeight.w600 : FontWeight.normal,
                 color: active
-                    ? AppConstants.amber
-                    : AppConstants.text2,
+                    ? const Color(0xFF111827)
+                    : const Color(0xFF6B7280),
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -226,7 +240,7 @@ class _MenuGrid extends StatelessWidget {
         if (!snap.hasData) {
           return const Center(
               child: CircularProgressIndicator(
-                  color: AppConstants.amber));
+                  color: Color(0xFF111827)));
         }
 
         var items =
@@ -244,7 +258,7 @@ class _MenuGrid extends StatelessWidget {
                   ? 'Menüde ürün yok'
                   : '$category kategorisinde ürün yok',
               style: GoogleFonts.montserrat(
-                  fontSize: 14, color: AppConstants.text2),
+                  fontSize: 14, color: const Color(0xFF6B7280)),
             ),
           );
         }
@@ -293,17 +307,16 @@ class _MenuCard extends StatelessWidget {
                 bottom: 80, left: 300, right: 16),
           ));
       },
-      borderRadius:
-          BorderRadius.circular(AppConstants.cardRadius),
+      borderRadius: BorderRadius.circular(14),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(AppConstants.cardRadius),
+          borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: AppConstants.purple.withValues(alpha: 0.10),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -316,13 +329,13 @@ class _MenuCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: 7, vertical: 3),
               decoration: BoxDecoration(
-                color: AppConstants.surface2,
+                color: const Color(0xFFF3F4F6),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(item.category,
                   style: GoogleFonts.montserrat(
                       fontSize: 9,
-                      color: AppConstants.text3,
+                      color: const Color(0xFF9CA3AF),
                       fontWeight: FontWeight.w500)),
             ),
             Expanded(
@@ -332,7 +345,7 @@ class _MenuCard extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppConstants.text1),
+                      color: const Color(0xFF111827)),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -348,17 +361,17 @@ class _MenuCard extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: AppConstants.amber),
+                      color: const Color(0xFF111827)),
                 ),
                 Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: AppConstants.amber,
+                    color: const Color(0xFF111827),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: const Icon(Icons.add,
-                      size: 16, color: Colors.black),
+                      size: 16, color: Colors.white),
                 ),
               ],
             ),
@@ -383,7 +396,7 @@ class _Cart extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(left: BorderSide(color: AppConstants.border)),
+        border: Border(left: BorderSide(color: Color(0xFFE5E7EB))),
       ),
       child: Column(
         children: [
@@ -393,18 +406,18 @@ class _Cart extends StatelessWidget {
             decoration: const BoxDecoration(
               border: Border(
                   bottom:
-                      BorderSide(color: AppConstants.border)),
+                      BorderSide(color: Color(0xFFE5E7EB))),
             ),
             child: Row(
               children: [
                 const Icon(Icons.shopping_cart_outlined,
-                    size: 16, color: AppConstants.text2),
+                    size: 16, color: Color(0xFF6B7280)),
                 const SizedBox(width: 8),
                 Text('Mevcut Sipariş',
                     style: GoogleFonts.montserrat(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: AppConstants.text1)),
+                        color: const Color(0xFF111827))),
                 const Spacer(),
                 if (cart.items.isNotEmpty)
                   GestureDetector(
@@ -412,7 +425,7 @@ class _Cart extends StatelessWidget {
                     child: Text('Temizle',
                         style: GoogleFonts.montserrat(
                             fontSize: 12,
-                            color: AppConstants.text3)),
+                            color: const Color(0xFF9CA3AF))),
                   ),
               ],
             ),
@@ -427,12 +440,12 @@ class _Cart extends StatelessWidget {
                         const Icon(
                             Icons.shopping_cart_outlined,
                             size: 40,
-                            color: AppConstants.text3),
+                            color: Color(0xFF9CA3AF)),
                         const SizedBox(height: 8),
                         Text('Henüz ürün yok',
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
-                                color: AppConstants.text3)),
+                                color: const Color(0xFF9CA3AF))),
                       ],
                     ),
                   )
@@ -441,7 +454,7 @@ class _Cart extends StatelessWidget {
                         const EdgeInsets.symmetric(vertical: 6),
                     itemCount: cart.items.length,
                     separatorBuilder: (_, __) => const Divider(
-                        height: 1, color: AppConstants.border),
+                        height: 1, color: Color(0xFFE5E7EB)),
                     itemBuilder: (ctx, i) {
                       final item = cart.items[i];
                       return Padding(
@@ -459,14 +472,14 @@ class _Cart extends StatelessWidget {
                                           fontSize: 13,
                                           fontWeight:
                                               FontWeight.w600,
-                                          color: AppConstants
-                                              .text1)),
+                                          color: const Color(
+                                              0xFF111827))),
                                   Text(
                                       'TL ${item.price.toStringAsFixed(2)} / adet',
                                       style: GoogleFonts.montserrat(
                                           fontSize: 11,
-                                          color: AppConstants
-                                              .text3)),
+                                          color: const Color(
+                                              0xFF9CA3AF))),
                                 ],
                               ),
                             ),
@@ -489,7 +502,8 @@ class _Cart extends StatelessWidget {
                                     fontSize: 13,
                                     fontWeight:
                                         FontWeight.w600,
-                                    color: AppConstants.text1),
+                                    color: const Color(
+                                        0xFF111827)),
                               ),
                             ),
                           ],
@@ -504,7 +518,7 @@ class _Cart extends StatelessWidget {
               decoration: const BoxDecoration(
                   border: Border(
                       top: BorderSide(
-                          color: AppConstants.border))),
+                          color: Color(0xFFE5E7EB)))),
               child: Column(
                 children: [
                   _row('Ara Toplam', cart.subtotal),
@@ -517,7 +531,7 @@ class _Cart extends StatelessWidget {
                         EdgeInsets.symmetric(vertical: 10),
                     child: Divider(
                         height: 1,
-                        color: AppConstants.border),
+                        color: Color(0xFFE5E7EB)),
                   ),
                   Row(
                     mainAxisAlignment:
@@ -527,13 +541,13 @@ class _Cart extends StatelessWidget {
                           style: GoogleFonts.montserrat(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
-                              color: AppConstants.text1)),
+                              color: const Color(0xFF111827))),
                       Text(
                           'TL ${cart.total.toStringAsFixed(2)}',
                           style: GoogleFonts.montserrat(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
-                              color: AppConstants.amber)),
+                              color: const Color(0xFF111827))),
                     ],
                   ),
                   const SizedBox(height: 14),
@@ -543,6 +557,15 @@ class _Cart extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () =>
                           _placeOrder(context, cart),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color(0xFF111827),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(10)),
+                        elevation: 0,
+                      ),
                       icon: const Icon(Icons.send_outlined,
                           size: 16),
                       label: Text('MUTFAĞA GÖNDER',
@@ -566,10 +589,10 @@ class _Cart extends StatelessWidget {
       children: [
         Text(label,
             style: GoogleFonts.montserrat(
-                fontSize: 12, color: AppConstants.text2)),
+                fontSize: 12, color: const Color(0xFF6B7280))),
         Text('TL ${amount.toStringAsFixed(2)}',
             style: GoogleFonts.montserrat(
-                fontSize: 12, color: AppConstants.text2)),
+                fontSize: 12, color: const Color(0xFF6B7280))),
       ],
     );
   }
@@ -602,7 +625,7 @@ class _Cart extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Hata: $e'),
-            backgroundColor: AppConstants.red));
+            backgroundColor: const Color(0xFFDC2626)));
       }
     }
   }
@@ -629,7 +652,7 @@ class _QtyControl extends StatelessWidget {
               style: GoogleFonts.montserrat(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppConstants.text1)),
+                  color: const Color(0xFF111827))),
         ),
         _btn(Icons.add, onInc),
       ],
@@ -643,12 +666,12 @@ class _QtyControl extends StatelessWidget {
         width: 22,
         height: 22,
         decoration: BoxDecoration(
-          color: AppConstants.surface2,
+          color: const Color(0xFFF3F4F6),
           borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: AppConstants.border),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
         ),
         child:
-            Icon(icon, size: 12, color: AppConstants.text2),
+            Icon(icon, size: 12, color: const Color(0xFF6B7280)),
       ),
     );
   }

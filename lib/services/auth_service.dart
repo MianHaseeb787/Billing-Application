@@ -6,20 +6,17 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Get current user
   User? get currentUser => _auth.currentUser;
 
-  // Auth state changes stream
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  // Sign in with email and password
   Future<AppUser?> signIn(String email, String password) async {
     try {
       final UserCredential userCredential = await _auth
           .signInWithEmailAndPassword(email: email.trim(), password: password);
 
       if (userCredential.user != null) {
-        // Get user data from Firestore
+        
         final userDoc = await _firestore
             .collection('users')
             .doc(userCredential.user!.uid)
@@ -28,7 +25,6 @@ class AuthService {
         if (userDoc.exists) {
           final userData = AppUser.fromFirestore(userDoc.data()!);
 
-          // Update last login
           await _firestore.collection('users').doc(userDoc.id).update({
             'lastLogin': FieldValue.serverTimestamp(),
           });
@@ -42,7 +38,6 @@ class AuthService {
     }
   }
 
-  // Sign up new user
   Future<AppUser?> signUp(
     String email,
     String password,
@@ -64,7 +59,6 @@ class AuthService {
           role: role,
         );
 
-        // Save user data to Firestore
         await _firestore
             .collection('users')
             .doc(userCredential.user!.uid)
@@ -78,12 +72,10 @@ class AuthService {
     }
   }
 
-  // Sign out
   Future<void> signOut() async {
     await _auth.signOut();
   }
 
-  // Get user data from Firestore
   Future<AppUser?> getUserData(String uid) async {
     try {
       final doc = await _firestore.collection('users').doc(uid).get();
@@ -96,12 +88,10 @@ class AuthService {
     }
   }
 
-  // Update user data
   Future<void> updateUserData(String uid, Map<String, dynamic> data) async {
     await _firestore.collection('users').doc(uid).update(data);
   }
 
-  // Get all users (admin only)
   Stream<List<AppUser>> getAllUsers() {
     return _firestore
         .collection('users')
@@ -113,7 +103,6 @@ class AuthService {
         );
   }
 
-  // Handle authentication errors
   String _handleAuthError(FirebaseAuthException e) {
     switch (e.code) {
       case 'user-not-found':

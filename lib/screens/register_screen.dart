@@ -3,9 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../models/user_model.dart';
-import '../utils/constants.dart';
 import 'login_screen.dart';
-import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -51,58 +49,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
 
         if (success && mounted) {
-          // Show success dialog
           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (context) => AlertDialog(
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(14),
               ),
               title: Column(
                 children: [
-                  Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                    size: 60,
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF16A34A).withValues(alpha: 0.10),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.check_circle_outline,
+                      color: Color(0xFF16A34A),
+                      size: 32,
+                    ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    "Registration Successful!",
+                    'Kayıt Başarılı!',
                     style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                      color: const Color(0xFF111827),
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
               content: Text(
-                "Your account has been created. You can now login to the system.",
-                style: GoogleFonts.montserrat(fontSize: 14),
+                'Hesabınız oluşturuldu. Şimdi sisteme giriş yapabilirsiniz.',
+                style: GoogleFonts.montserrat(
+                    fontSize: 14, color: const Color(0xFF6B7280)),
                 textAlign: TextAlign.center,
               ),
               actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (route) => false,
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppConstants.secondaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const LoginScreen()),
+                        (route) => false,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF111827),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    minimumSize: Size(double.infinity, 45),
-                  ),
-                  child: Text(
-                    "Go to Login",
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    child: Text(
+                      'Giriş Yap',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 ),
@@ -114,8 +127,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(e.toString()),
-              backgroundColor: Colors.red,
+              content: Text(e.toString(),
+                  style: GoogleFonts.montserrat(fontSize: 13)),
+              backgroundColor: const Color(0xFFDC2626),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -131,10 +145,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  InputDecoration _fieldDecoration(String label,
+      {IconData? prefixIcon, Widget? suffixIcon, String? hint}) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      prefixIcon: prefixIcon != null
+          ? Icon(prefixIcon, size: 18, color: const Color(0xFF9CA3AF))
+          : null,
+      suffixIcon: suffixIcon,
+      filled: true,
+      fillColor: const Color(0xFFF3F4F6),
+      labelStyle: GoogleFonts.montserrat(
+          color: const Color(0xFF9CA3AF), fontSize: 14),
+      hintStyle: GoogleFonts.montserrat(
+          color: const Color(0xFF9CA3AF), fontSize: 14),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:
+            const BorderSide(color: Color(0xFF111827), width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFDC2626)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:
+            const BorderSide(color: Color(0xFFDC2626), width: 1.5),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.primaryColor,
+      backgroundColor: const Color(0xFFEDE0FF),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -147,31 +197,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Logo and Title
                       _buildHeader(),
                       const SizedBox(height: 32),
 
-                      // Registration Form Card
                       Container(
                         padding: const EdgeInsets.all(32),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(14),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
+                              color: Colors.black.withValues(alpha: 0.08),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
                         child: Column(
                           children: [
-                            // Progress Steps
                             _buildProgressSteps(),
                             const SizedBox(height: 32),
 
-                            // Step Content
                             if (_currentStep == 0)
                               _buildAccountInfoStep()
                             else
@@ -179,7 +225,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                             const SizedBox(height: 24),
 
-                            // Navigation Buttons
                             _buildNavigationButtons(),
                           ],
                         ),
@@ -187,7 +232,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       const SizedBox(height: 24),
 
-                      // Login Link
                       _buildLoginLink(),
                     ],
                   ),
@@ -203,42 +247,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildHeader() {
     return Column(
       children: [
-        // Logo
         Container(
-          width: 100,
-          height: 100,
+          width: 80,
+          height: 80,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: AppConstants.secondaryColor.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: Icon(
-            Icons.restaurant,
-            size: 50,
-            color: AppConstants.secondaryColor,
+          child: const Icon(
+            Icons.restaurant_outlined,
+            size: 38,
+            color: Color(0xFF111827),
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
         Text(
-          "Create Account",
+          'Hesap Oluştur',
           style: GoogleFonts.montserrat(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF111827),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Text(
-          "Join DinO Dine POS System",
+          'Dijital Adisyon POS Sistemine Katılın',
           style: GoogleFonts.montserrat(
-            fontSize: 16,
-            color: Colors.white70,
+            fontSize: 14,
+            color: const Color(0xFF6B7280),
           ),
         ),
       ],
@@ -248,16 +291,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildProgressSteps() {
     return Row(
       children: [
-        _buildStep(0, "Account", Icons.person),
+        _buildStep(0, 'Hesap', Icons.person_outline),
         Expanded(
           child: Container(
             height: 2,
             color: _currentStep >= 1
-                ? AppConstants.secondaryColor
-                : Colors.grey[300],
+                ? const Color(0xFF111827)
+                : const Color(0xFFE5E7EB),
           ),
         ),
-        _buildStep(1, "Role", Icons.badge),
+        _buildStep(1, 'Rol', Icons.badge_outlined),
       ],
     );
   }
@@ -267,25 +310,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       children: [
         Container(
-          width: 50,
-          height: 50,
+          width: 48,
+          height: 48,
           decoration: BoxDecoration(
-            color: isActive ? AppConstants.secondaryColor : Colors.grey[300],
+            color: isActive
+                ? const Color(0xFF111827)
+                : const Color(0xFFF3F4F6),
             shape: BoxShape.circle,
+            border: Border.all(
+              color: isActive
+                  ? const Color(0xFF111827)
+                  : const Color(0xFFE5E7EB),
+            ),
           ),
           child: Icon(
             icon,
-            color: isActive ? Colors.white : Colors.grey[600],
-            size: 24,
+            color: isActive ? Colors.white : const Color(0xFF9CA3AF),
+            size: 22,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Text(
           label,
           style: GoogleFonts.montserrat(
             fontSize: 12,
-            color: isActive ? AppConstants.secondaryColor : Colors.grey[600],
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            color: isActive
+                ? const Color(0xFF111827)
+                : const Color(0xFF9CA3AF),
+            fontWeight:
+                isActive ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
       ],
@@ -295,78 +348,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildAccountInfoStep() {
     return Column(
       children: [
-        // Name Field
         TextFormField(
           controller: _nameController,
-          decoration: InputDecoration(
-            labelText: 'Full Name',
-            hintText: 'Enter your full name',
-            prefixIcon: const Icon(Icons.person_outline),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: AppConstants.secondaryColor,
-                width: 2,
-              ),
-            ),
+          style: GoogleFonts.montserrat(
+              fontSize: 14, color: const Color(0xFF111827)),
+          decoration: _fieldDecoration(
+            'Ad Soyad',
+            prefixIcon: Icons.person_outline,
+            hint: 'Adınızı girin',
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter your name';
+              return 'Lütfen adınızı girin';
             }
             if (value.length < 3) {
-              return 'Name must be at least 3 characters';
+              return 'Ad en az 3 karakter olmalıdır';
             }
             return null;
           },
         ),
         const SizedBox(height: 16),
 
-        // Email Field
         TextFormField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            labelText: 'Email',
-            hintText: 'Enter your email',
-            prefixIcon: const Icon(Icons.email_outlined),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: AppConstants.secondaryColor,
-                width: 2,
-              ),
-            ),
+          style: GoogleFonts.montserrat(
+              fontSize: 14, color: const Color(0xFF111827)),
+          decoration: _fieldDecoration(
+            'E-posta',
+            prefixIcon: Icons.email_outlined,
+            hint: 'E-postanızı girin',
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter your email';
+              return 'Lütfen e-posta girin';
             }
             if (!value.contains('@') || !value.contains('.')) {
-              return 'Please enter a valid email';
+              return 'Geçerli bir e-posta girin';
             }
             return null;
           },
         ),
         const SizedBox(height: 16),
 
-        // Password Field
         TextFormField(
           controller: _passwordController,
           obscureText: _obscurePassword,
-          decoration: InputDecoration(
-            labelText: 'Password',
-            hintText: 'Create a password',
-            prefixIcon: const Icon(Icons.lock_outlined),
+          style: GoogleFonts.montserrat(
+              fontSize: 14, color: const Color(0xFF111827)),
+          decoration: _fieldDecoration(
+            'Şifre',
+            prefixIcon: Icons.lock_outlined,
+            hint: 'Şifre oluşturun',
             suffixIcon: IconButton(
               icon: Icon(
-                _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                _obscurePassword
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                size: 18,
+                color: const Color(0xFF9CA3AF),
               ),
               onPressed: () {
                 setState(() {
@@ -374,63 +414,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 });
               },
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: AppConstants.secondaryColor,
-                width: 2,
-              ),
-            ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter a password';
+              return 'Lütfen şifre girin';
             }
             if (value.length < 6) {
-              return 'Password must be at least 6 characters';
+              return 'Şifre en az 6 karakter olmalıdır';
             }
             return null;
           },
         ),
         const SizedBox(height: 16),
 
-        // Confirm Password Field
         TextFormField(
           controller: _confirmPasswordController,
           obscureText: _obscureConfirmPassword,
-          decoration: InputDecoration(
-            labelText: 'Confirm Password',
-            hintText: 'Confirm your password',
-            prefixIcon: const Icon(Icons.lock_outlined),
+          style: GoogleFonts.montserrat(
+              fontSize: 14, color: const Color(0xFF111827)),
+          decoration: _fieldDecoration(
+            'Şifreyi Onayla',
+            prefixIcon: Icons.lock_outlined,
+            hint: 'Şifrenizi onaylayın',
             suffixIcon: IconButton(
               icon: Icon(
                 _obscureConfirmPassword
-                    ? Icons.visibility
-                    : Icons.visibility_off,
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                size: 18,
+                color: const Color(0xFF9CA3AF),
               ),
               onPressed: () {
                 setState(() {
-                  _obscureConfirmPassword = !_obscureConfirmPassword;
+                  _obscureConfirmPassword =
+                      !_obscureConfirmPassword;
                 });
               },
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: AppConstants.secondaryColor,
-                width: 2,
-              ),
             ),
           ),
           validator: (value) {
             if (value != _passwordController.text) {
-              return 'Passwords do not match';
+              return 'Şifreler eşleşmiyor';
             }
             return null;
           },
@@ -444,60 +468,64 @@ class _RegisterScreenState extends State<RegisterScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Select Your Role",
+          'Rol Seçin',
           style: GoogleFonts.montserrat(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF111827),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         Text(
-          "Choose the role that best describes your position",
+          'Pozisyonunuzu en iyi açıklayan rolü seçin',
           style: GoogleFonts.montserrat(
-            fontSize: 14,
-            color: Colors.grey[600],
+            fontSize: 13,
+            color: const Color(0xFF6B7280),
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
         ...UserRole.values.map((role) {
           final isSelected = _selectedRole == role;
+          final color = _getRoleColor(role);
           return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: 10),
             child: InkWell(
               onTap: () {
                 setState(() {
                   _selectedRole = role;
                 });
               },
+              borderRadius: BorderRadius.circular(12),
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: isSelected
-                        ? AppConstants.secondaryColor
-                        : Colors.grey[300]!,
-                    width: 2,
+                        ? const Color(0xFF111827)
+                        : const Color(0xFFE5E7EB),
+                    width: isSelected ? 1.5 : 1,
                   ),
                   borderRadius: BorderRadius.circular(12),
                   color: isSelected
-                      ? AppConstants.secondaryColor.withOpacity(0.1)
+                      ? const Color(0xFF111827).withValues(alpha: 0.04)
                       : Colors.white,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 44,
+                      height: 44,
                       decoration: BoxDecoration(
-                        color: _getRoleColor(role).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        color: color.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(
                         _getRoleIcon(role),
-                        color: _getRoleColor(role),
+                        color: color,
+                        size: 20,
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -505,25 +533,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Text(
                             _getRoleName(role),
                             style: GoogleFonts.montserrat(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF111827),
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 2),
                           Text(
                             _getRoleDescription(role),
                             style: GoogleFonts.montserrat(
-                              fontSize: 12,
-                              color: Colors.grey[600],
+                              fontSize: 11,
+                              color: const Color(0xFF6B7280),
                             ),
                           ),
                         ],
                       ),
                     ),
                     if (isSelected)
-                      Icon(
+                      const Icon(
                         Icons.check_circle,
-                        color: AppConstants.secondaryColor,
+                        color: Color(0xFF111827),
+                        size: 20,
                       ),
                   ],
                 ),
@@ -547,29 +577,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 });
               },
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                side: BorderSide(color: AppConstants.secondaryColor),
+                foregroundColor: const Color(0xFF111827),
+                side: const BorderSide(color: Color(0xFFE5E7EB)),
               ),
               child: Text(
-                "Back",
+                'Geri',
                 style: GoogleFonts.montserrat(
-                  color: AppConstants.secondaryColor,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
                 ),
               ),
             ),
           ),
-        if (_currentStep > 0) const SizedBox(width: 16),
+        if (_currentStep > 0) const SizedBox(width: 12),
         Expanded(
           child: ElevatedButton(
             onPressed: _isLoading
                 ? null
                 : () {
                     if (_currentStep == 0) {
-                      // Validate first step before proceeding
                       if (_formKey.currentState!.validate()) {
                         setState(() {
                           _currentStep = 1;
@@ -580,29 +610,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                   },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppConstants.secondaryColor,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              backgroundColor: const Color(0xFF111827),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
               ),
-              disabledBackgroundColor:
-                  AppConstants.secondaryColor.withOpacity(0.5),
+              elevation: 0,
             ),
             child: _isLoading
                 ? const SizedBox(
-                    height: 20,
-                    width: 20,
+                    height: 18,
+                    width: 18,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
                 : Text(
-                    _currentStep == 0 ? "Next" : "Create Account",
+                    _currentStep == 0 ? 'İleri' : 'Hesap Oluştur',
                     style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
                   ),
           ),
@@ -616,9 +646,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Already have an account? ",
+          'Zaten hesabınız var mı? ',
           style: GoogleFonts.montserrat(
-            color: Colors.white70,
+            color: const Color(0xFF6B7280),
+            fontSize: 13,
           ),
         ),
         GestureDetector(
@@ -629,11 +660,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
           },
           child: Text(
-            "Login",
+            'Giriş Yap',
             style: GoogleFonts.montserrat(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+              color: const Color(0xFF111827),
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
               decoration: TextDecoration.underline,
+              decorationColor: const Color(0xFF111827),
             ),
           ),
         ),
@@ -644,43 +677,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
   IconData _getRoleIcon(UserRole role) {
     switch (role) {
       case UserRole.admin:
-        return Icons.admin_panel_settings;
+        return Icons.admin_panel_settings_outlined;
       case UserRole.cashier:
-        return Icons.point_of_sale;
+        return Icons.point_of_sale_outlined;
       case UserRole.manager:
-        return Icons.manage_accounts;
+        return Icons.manage_accounts_outlined;
       case UserRole.kitchen:
-        return Icons.kitchen;
+        return Icons.kitchen_outlined;
     }
   }
 
   Color _getRoleColor(UserRole role) {
     switch (role) {
       case UserRole.admin:
-        return Colors.red;
+        return const Color(0xFFDC2626);
       case UserRole.cashier:
-        return Colors.green;
+        return const Color(0xFF16A34A);
       case UserRole.manager:
-        return Colors.blue;
+        return const Color(0xFF2563EB);
       case UserRole.kitchen:
-        return Colors.orange;
+        return const Color(0xFFD97706);
     }
   }
 
   String _getRoleName(UserRole role) {
-    return role.toString().split('.').last.toUpperCase();
+    switch (role) {
+      case UserRole.admin:
+        return 'YÖNETİCİ';
+      case UserRole.cashier:
+        return 'KASIYER';
+      case UserRole.manager:
+        return 'MÜDÜR';
+      case UserRole.kitchen:
+        return 'MUTFAK';
+    }
   }
 
   String _getRoleDescription(UserRole role) {
     switch (role) {
       case UserRole.admin:
-        return 'Full system access, manage users and settings';
+        return 'Tam sistem erişimi, kullanıcı ve ayar yönetimi';
       case UserRole.cashier:
-        return 'Handle bills, payments and table management';
+        return 'Hesap kesme, ödeme ve masa yönetimi';
       case UserRole.manager:
-        return 'Manage menu, inventory and view reports';
+        return 'Menü yönetimi ve rapor görüntüleme';
       case UserRole.kitchen:
-        return 'View and update order status';
+        return 'Sipariş durumlarını görüntüle ve güncelle';
     }
   }
 }
