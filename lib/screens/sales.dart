@@ -31,24 +31,13 @@ class _SalesScreenState extends State<SalesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFFDBEAFE),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF000052),
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x0F000000),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,14 +46,14 @@ class _SalesScreenState extends State<SalesScreen> {
               style: GoogleFonts.montserrat(
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF111827),
+                color: Colors.white,
               ),
             ),
             Text(
               'Gelir ve işlem özeti',
               style: GoogleFonts.montserrat(
                 fontSize: 11,
-                color: const Color(0xFF9CA3AF),
+                color: Colors.white60,
               ),
             ),
           ],
@@ -85,7 +74,7 @@ class _SalesScreenState extends State<SalesScreen> {
         builder: (_, snap) {
           if (!snap.hasData) {
             return const Center(
-                child: CircularProgressIndicator(color: Color(0xFF111827)));
+                child: CircularProgressIndicator(color: Color(0xFF000052)));
           }
 
           final cutoff = _from;
@@ -188,7 +177,7 @@ class _PeriodSelector extends StatelessWidget {
       height: 36,
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -222,7 +211,7 @@ class _PeriodSelector extends StatelessWidget {
                       active ? FontWeight.w700 : FontWeight.w500,
                   color: active
                       ? const Color(0xFF111827)
-                      : const Color(0xFF6B7280),
+                      : Colors.white70,
                 ),
               ),
             ),
@@ -311,8 +300,8 @@ class _KpiCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.07),
-              blurRadius: 14,
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
               offset: const Offset(0, 3),
             ),
           ],
@@ -390,8 +379,8 @@ class _PaymentBreakdown extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 14,
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
             offset: const Offset(0, 3),
           ),
         ],
@@ -405,11 +394,11 @@ class _PaymentBreakdown extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF111827).withValues(alpha: 0.07),
+                  color: const Color(0xFF000052).withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(Icons.pie_chart_outline,
-                    size: 16, color: Color(0xFF111827)),
+                    size: 16, color: Color(0xFF000052)),
               ),
               const SizedBox(width: 10),
               Text('Ödeme Yöntemleri',
@@ -456,7 +445,7 @@ class _PaymentBreakdown extends StatelessWidget {
                               style: GoogleFonts.montserrat(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF374151))),
+                                  color: const Color(0xFF111827))),
                         ),
                         Text(
                           'TL ${e.value.toStringAsFixed(0)}',
@@ -517,8 +506,8 @@ class _TopItems extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 14,
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
             offset: const Offset(0, 3),
           ),
         ],
@@ -642,8 +631,8 @@ class _TransactionLog extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 14,
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
             offset: const Offset(0, 3),
           ),
         ],
@@ -786,7 +775,7 @@ class _TransactionLog extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20, vertical: 14),
-                  color: Colors.white,
+                  color: Colors.transparent,
                   child: Row(
                     children: [
                       Container(
@@ -842,7 +831,7 @@ class _TransactionLog extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
-                                color: const Color(0xFF6B7280))),
+                                color: const Color(0xFF111827))),
                       ),
                       SizedBox(
                         width: 100,

@@ -35,24 +35,13 @@ class _KitchenDisplayScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFFDBEAFE),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF000052),
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x0F000000),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Row(
           children: [
             Container(
@@ -67,7 +56,7 @@ class _KitchenDisplayScreenState
                 style: GoogleFonts.montserrat(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF111827),
+                    color: Colors.white,
                     letterSpacing: 2)),
           ],
         ),
@@ -86,7 +75,7 @@ class _KitchenDisplayScreenState
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(
                 child: CircularProgressIndicator(
-                    color: Color(0xFF111827)));
+                    color: Color(0xFF000052)));
           }
 
           final orders = (snap.data ?? [])
@@ -125,7 +114,7 @@ class _KitchenDisplayScreenState
                   Text('Kuyrukta aktif sipariş yok',
                       style: GoogleFonts.montserrat(
                           fontSize: 15,
-                          color: const Color(0xFF6B7280))),
+                          color: const Color(0xFF1E40AF))),
                 ],
               ),
             );
@@ -161,7 +150,7 @@ class _KitchenDisplayScreenState
         const SizedBox(width: 5),
         Text(label,
             style: GoogleFonts.montserrat(
-                fontSize: 10, color: const Color(0xFF6B7280))),
+                fontSize: 10, color: Colors.white60)),
       ],
     );
   }
@@ -185,18 +174,11 @@ class _KdsCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFDBEAFE),
         borderRadius: BorderRadius.circular(14),
         border: isUrgent
             ? Border.all(color: const Color(0xFFDC2626), width: 2)
             : null,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -225,7 +207,7 @@ class _KdsCard extends StatelessWidget {
                           '#${order.id.substring(0, 6).toUpperCase()}',
                           style: GoogleFonts.montserrat(
                               fontSize: 10,
-                              color: const Color(0xFF9CA3AF))),
+                              color: const Color(0xFF1E40AF))),
                     ],
                   ),
                 ),
@@ -256,14 +238,14 @@ class _KdsCard extends StatelessWidget {
                             size: 10,
                             color: isUrgent
                                 ? const Color(0xFFDC2626)
-                                : const Color(0xFF9CA3AF)),
+                                : const Color(0xFF1E40AF)),
                         const SizedBox(width: 2),
                         Text(_elapsedLabel(elapsed),
                             style: GoogleFonts.montserrat(
                                 fontSize: 10,
                                 color: isUrgent
                                     ? const Color(0xFFDC2626)
-                                    : const Color(0xFF9CA3AF),
+                                    : const Color(0xFF1E40AF),
                                 fontWeight: isUrgent
                                     ? FontWeight.w700
                                     : FontWeight.normal)),
@@ -290,7 +272,7 @@ class _KdsCard extends StatelessWidget {
                         width: 26,
                         height: 26,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF3F4F6),
+                          color: Colors.black.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         alignment: Alignment.center,
@@ -305,7 +287,7 @@ class _KdsCard extends StatelessWidget {
                         child: Text(item.name,
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
-                                color: const Color(0xFF6B7280))),
+                                color: const Color(0xFF111827))),
                       ),
                     ],
                   ),

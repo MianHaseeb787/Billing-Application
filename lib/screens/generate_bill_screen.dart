@@ -32,24 +32,13 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFFDBEAFE),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF000052),
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x0F000000),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Color(0xFF111827)),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,14 +47,14 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
               style: GoogleFonts.montserrat(
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF111827),
+                color: Colors.white,
               ),
             ),
             Text(
               'Sipariş seçin ve ödemeyi işleyin',
               style: GoogleFonts.montserrat(
                 fontSize: 11,
-                color: const Color(0xFF9CA3AF),
+                color: Colors.white60,
               ),
             ),
           ],
@@ -103,11 +92,11 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
+                color: Colors.black.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Icon(Icons.receipt_long_outlined,
-                  size: 34, color: Color(0xFF9CA3AF)),
+                  size: 34, color: Color(0xFF1E40AF)),
             ),
             const SizedBox(height: 16),
             Text('Sipariş Seçin',
@@ -118,11 +107,11 @@ class _GenerateBillScreenState extends State<GenerateBillScreen> {
             const SizedBox(height: 6),
             Text('Hesap kesmek için sol panelden sipariş seçin',
                 style: GoogleFonts.montserrat(
-                    fontSize: 13, color: const Color(0xFF6B7280))),
+                    fontSize: 13, color: const Color(0xFF1E40AF))),
             const SizedBox(height: 4),
             Text('Mutfak hazır olarak işaretlediğinde görünür',
                 style: GoogleFonts.montserrat(
-                    fontSize: 12, color: const Color(0xFF9CA3AF))),
+                    fontSize: 12, color: const Color(0xFF1E40AF))),
           ],
         ),
       );
@@ -825,18 +814,20 @@ class _OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(right: BorderSide(color: Color(0xFFE5E7EB))),
+      decoration: BoxDecoration(
+        color: const Color(0xFF000052),
+        border: Border(
+            right: BorderSide(color: Colors.white.withValues(alpha: 0.12))),
       ),
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: 18, vertical: 16),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               border: Border(
-                  bottom: BorderSide(color: Color(0xFFE5E7EB))),
+                  bottom: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.12))),
             ),
             child: Row(
               children: [
@@ -844,7 +835,7 @@ class _OrderList extends StatelessWidget {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF111827),
+                    color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(9),
                   ),
                   child: const Icon(Icons.receipt_long_outlined,
@@ -855,7 +846,7 @@ class _OrderList extends StatelessWidget {
                     style: GoogleFonts.montserrat(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF111827))),
+                        color: Colors.white)),
               ],
             ),
           ),
@@ -878,7 +869,7 @@ class _OrderList extends StatelessWidget {
                 if (!snap.hasData) {
                   return const Center(
                       child: CircularProgressIndicator(
-                          color: Color(0xFF111827)));
+                          color: Colors.white));
                 }
 
                 final orders = snap.data!.docs
@@ -902,19 +893,20 @@ class _OrderList extends StatelessWidget {
                           width: 56,
                           height: 56,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF3F4F6),
+                            color: Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: const Icon(
+                          child: Icon(
                               Icons.receipt_long_outlined,
-                              size: 26, color: Color(0xFF9CA3AF)),
+                              size: 26,
+                              color: Colors.white.withValues(alpha: 0.5)),
                         ),
                         const SizedBox(height: 14),
                         Text('Bekleyen sipariş yok',
                             style: GoogleFonts.montserrat(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF111827))),
+                                color: Colors.white)),
                         const SizedBox(height: 6),
                         Padding(
                           padding:
@@ -924,7 +916,7 @@ class _OrderList extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: GoogleFonts.montserrat(
                                 fontSize: 11,
-                                color: const Color(0xFF9CA3AF)),
+                                color: Colors.white54),
                           ),
                         ),
                       ],
@@ -935,8 +927,9 @@ class _OrderList extends StatelessWidget {
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   itemCount: orders.length,
-                  separatorBuilder: (_, __) => const Divider(
-                      height: 1, color: Color(0xFFE5E7EB)),
+                  separatorBuilder: (_, __) => Divider(
+                      height: 1,
+                      color: Colors.white.withValues(alpha: 0.12)),
                   itemBuilder: (ctx, i) => _OrderTile(
                       order: orders[i],
                       selected: selected,
@@ -974,9 +967,7 @@ class _OrderTile extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(
             horizontal: 18, vertical: 14),
-        color: isSel
-            ? const Color(0xFF111827).withValues(alpha: 0.05)
-            : Colors.white,
+        color: isSel ? Colors.white : Colors.transparent,
         child: Row(
           children: [
             Container(
@@ -984,8 +975,8 @@ class _OrderTile extends StatelessWidget {
               height: 44,
               decoration: BoxDecoration(
                 color: isSel
-                    ? const Color(0xFF111827)
-                    : const Color(0xFFF3F4F6),
+                    ? const Color(0xFF000052)
+                    : Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
@@ -994,8 +985,7 @@ class _OrderTile extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
-                      color:
-                          isSel ? Colors.white : const Color(0xFF111827)),
+                      color: Colors.white),
                 ),
               ),
             ),
@@ -1010,13 +1000,15 @@ class _OrderTile extends StatelessWidget {
                           style: GoogleFonts.montserrat(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: const Color(0xFF111827))),
+                              color: isSel
+                                  ? const Color(0xFF111827)
+                                  : Colors.white)),
                       const Spacer(),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: statusColor.withValues(alpha: 0.1),
+                          color: statusColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -1034,14 +1026,18 @@ class _OrderTile extends StatelessWidget {
                     '${order.items.length} ürün',
                     style: GoogleFonts.montserrat(
                         fontSize: 11,
-                        color: const Color(0xFF9CA3AF)),
+                        color: isSel
+                            ? const Color(0xFF6B7280)
+                            : Colors.white54),
                   ),
                   Text(
                     'TL ${order.total.toStringAsFixed(2)}',
                     style: GoogleFonts.montserrat(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF111827)),
+                        color: isSel
+                            ? const Color(0xFF111827)
+                            : Colors.white),
                   ),
                 ],
               ),

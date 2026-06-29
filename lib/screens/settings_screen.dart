@@ -76,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (auth.user?.role != UserRole.admin) {
       return Scaffold(
-        backgroundColor: const Color(0xFFEDE0FF),
+        backgroundColor: const Color(0xFFDBEAFE),
         appBar: _buildAppBar(),
         body: Center(
           child: Column(
@@ -86,11 +86,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF3F4F6),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: const Icon(Icons.lock_outline,
-                    size: 30, color: Color(0xFF9CA3AF)),
+                    size: 30, color: Color(0xFF000052)),
               ),
               const SizedBox(height: 16),
               Text('Yönetici Erişimi Gerekli',
@@ -109,7 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE0FF),
+      backgroundColor: const Color(0xFFDBEAFE),
       appBar: _buildAppBar(),
       body: Row(
         children: [
@@ -122,22 +129,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF000052),
       elevation: 0,
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x0F000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-      ),
-      iconTheme: const IconThemeData(color: Color(0xFF111827)),
+      iconTheme: const IconThemeData(color: Colors.white),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -146,14 +142,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: GoogleFonts.montserrat(
               fontSize: 17,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF111827),
+              color: Colors.white,
             ),
           ),
           Text(
             'Sistem yapılandırması',
             style: GoogleFonts.montserrat(
               fontSize: 11,
-              color: const Color(0xFF9CA3AF),
+              color: Colors.white60,
             ),
           ),
         ],
@@ -169,9 +165,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ];
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(right: BorderSide(color: Color(0xFFE5E7EB))),
+      decoration: BoxDecoration(
+        color: const Color(0xFF000052),
+        border: Border(right: BorderSide(color: Colors.white.withValues(alpha: 0.12))),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -183,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 2,
-                    color: const Color(0xFF9CA3AF))),
+                    color: Colors.white54)),
           ),
           ...tabs.asMap().entries.map((e) {
             final active = _tab == e.key;
@@ -196,12 +192,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     horizontal: 20, vertical: 14),
                 decoration: BoxDecoration(
                   color: active
-                      ? const Color(0xFF111827).withValues(alpha: 0.05)
+                      ? Colors.white.withValues(alpha: 0.15)
                       : Colors.transparent,
                   border: Border(
                     left: BorderSide(
                       color: active
-                          ? const Color(0xFF111827)
+                          ? Colors.white
                           : Colors.transparent,
                       width: 3,
                     ),
@@ -214,15 +210,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       height: 34,
                       decoration: BoxDecoration(
                         color: active
-                            ? const Color(0xFF111827)
-                            : const Color(0xFFF3F4F6),
+                            ? Colors.white.withValues(alpha: 0.20)
+                            : Colors.white.withValues(alpha: 0.10),
                         borderRadius: BorderRadius.circular(9),
                       ),
                       child: Icon(icon,
                           size: 17,
                           color: active
                               ? Colors.white
-                              : const Color(0xFF6B7280)),
+                              : Colors.white60),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -236,12 +232,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ? FontWeight.w700
                                       : FontWeight.w500,
                                   color: active
-                                      ? const Color(0xFF111827)
-                                      : const Color(0xFF374151))),
+                                      ? Colors.white
+                                      : Colors.white60)),
                           Text(sub,
                               style: GoogleFonts.montserrat(
                                   fontSize: 10,
-                                  color: const Color(0xFF9CA3AF))),
+                                  color: Colors.white54)),
                         ],
                       ),
                     ),
@@ -251,13 +247,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             );
           }),
           const Spacer(),
-          const Divider(height: 1, color: Color(0xFFE5E7EB)),
+          Divider(height: 1, color: Colors.white.withValues(alpha: 0.12)),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
+                color: Colors.white.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -266,7 +262,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF16A34A).withValues(alpha: 0.12),
+                      color: const Color(0xFF16A34A).withValues(alpha: 0.20),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.check_circle_outline,
@@ -280,11 +276,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           style: GoogleFonts.montserrat(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF111827))),
+                              color: Colors.white)),
                       Text('v1.0  ·  Dijital Adisyon',
                           style: GoogleFonts.montserrat(
                               fontSize: 10,
-                              color: const Color(0xFF9CA3AF))),
+                              color: Colors.white54)),
                     ],
                   ),
                 ],
@@ -330,14 +326,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Text('Personel hesapları ve rollerini yönetin',
                       style: GoogleFonts.montserrat(
                           fontSize: 12,
-                          color: const Color(0xFF9CA3AF))),
+                          color: const Color(0xFF6B7280))),
                 ],
               ),
               const Spacer(),
               ElevatedButton.icon(
                 onPressed: () => _showRegisterDialog(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF111827),
+                  backgroundColor: const Color(0xFF000052),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -362,7 +358,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (!snap.hasData) {
                 return const Center(
                     child: CircularProgressIndicator(
-                        color: Color(0xFF111827)));
+                        color: Color(0xFF000052)));
               }
 
               final users = snap.data!.docs
@@ -434,8 +430,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.07),
-                  blurRadius: 14,
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 12,
                   offset: const Offset(0, 3),
                 ),
               ],
@@ -447,7 +443,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: GoogleFonts.montserrat(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF374151))),
+                        color: const Color(0xFF111827))),
                 const SizedBox(height: 14),
                 _field('Restoran Adı', _nameCtrl),
                 const SizedBox(height: 12),
@@ -462,7 +458,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: GoogleFonts.montserrat(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF374151))),
+                        color: const Color(0xFF111827))),
                 const SizedBox(height: 14),
                 Row(
                   children: [
@@ -484,7 +480,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: ElevatedButton(
                     onPressed: _saving ? null : _saveInfo,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF111827),
+                      backgroundColor: const Color(0xFF000052),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
@@ -529,8 +525,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.07),
-                  blurRadius: 14,
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 12,
                   offset: const Offset(0, 3),
                 ),
               ],
@@ -568,7 +564,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: GoogleFonts.montserrat(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF374151))),
+                        color: const Color(0xFF111827))),
                 const SizedBox(height: 16),
                 _receiptToggle(
                   Icons.receipt_outlined,
@@ -606,10 +602,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: const Color(0xFFF3F4F6),
+            color: const Color(0xFF000052).withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(9),
           ),
-          child: Icon(icon, size: 18, color: const Color(0xFF6B7280)),
+          child: Icon(icon, size: 18, color: const Color(0xFF000052)),
         ),
         const SizedBox(width: 14),
         Expanded(
@@ -624,14 +620,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(height: 2),
               Text(subtitle,
                   style: GoogleFonts.montserrat(
-                      fontSize: 11, color: const Color(0xFF9CA3AF))),
+                      fontSize: 11, color: const Color(0xFF6B7280))),
             ],
           ),
         ),
         Switch(
           value: value,
           onChanged: (_) {},
-          activeThumbColor: const Color(0xFF111827),
+          activeThumbColor: const Color(0xFF000052),
         ),
       ],
     );
@@ -644,7 +640,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFF111827),
+            color: const Color(0xFF000052),
             borderRadius: BorderRadius.circular(11),
           ),
           child: Icon(icon, size: 20, color: Colors.white),
@@ -660,7 +656,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     color: const Color(0xFF111827))),
             Text(subtitle,
                 style: GoogleFonts.montserrat(
-                    fontSize: 12, color: const Color(0xFF9CA3AF))),
+                    fontSize: 12, color: const Color(0xFF6B7280))),
           ],
         ),
       ],
@@ -1158,7 +1154,7 @@ class _UserCard extends StatelessWidget {
                     .doc(user.uid)
                     .update({'isActive': v}),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                activeThumbColor: const Color(0xFF111827),
+                activeThumbColor: const Color(0xFF000052),
               ),
             ],
           ),
