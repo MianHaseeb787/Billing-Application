@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final role = auth.user?.role;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF1E3A5F),
       body: Column(
         children: [
           _TopBar(now: _now, auth: auth),
